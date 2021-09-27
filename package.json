@@ -1,0 +1,24 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "12.17.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kbc18a10/sample.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kbc18a10/sample/issues"
+  },
+  "homepage": "https://github.com/kbc18a10/sample#readme"
+}
