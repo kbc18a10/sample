@@ -64,6 +64,7 @@ const App = () => {
   useEffect(()=>{
       if(clickedTileID){
         socketRef.current.emit('clicked_tile',{player:myself,tileID:clickedTileID});
+        setClickedTileID();
       }
   },[clickedTileID])
 

@@ -18,6 +18,7 @@ const Tile = ({name, onButtonClick}) => {
     const handleClicked = (e) => {
         setDomination(name);
         onButtonClick(e.currentTarget.id);
+        console.log("button clicked");
     }
     
     return(
