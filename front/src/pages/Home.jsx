@@ -1,17 +1,32 @@
 import React from 'react';
+import { Button } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
 
-const Home = (/*{onHome}*/) => {
-/*
-    const handleSetIsHome = () => {
-        onHome(false);
+const useStyles = makeStyles({
+    button: {
     }
-*/
+  });
+  
+
+const Home = ({onChangeState}) => {
+    const classes = useStyles();
+
+    const handleChangeState = () => {
+        onChangeState("lobby");
+    }
+
     return (
         <div className="Home"> 
             <h1>ホーム画面</h1>
-            {/*<Link to="/lobby" onClick={handleSetIsHome}>ロビー画面へ</Link>*/}
-            <Link to="/lobby">ロビー画面へ</Link>
+            <Button
+                className={classes.button}
+                component={Link}
+                to="/lobby"
+                onClick={handleChangeState}
+            >
+                ロビー画面へ
+            </Button>
         </div>
     );
 }

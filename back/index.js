@@ -32,31 +32,92 @@ io.set( 'origins', '*:*' );
 var players = {};
 
 
-const user = {
-  1:{color:"blue"},
-  2:{color:"yellow"},
-  3:{color:"red"},
-  4:{color:"green"},
-}
-
-
-var i = 0;
-
 io.on('connection', (socket) => {
-  i += 1;
-  var index = i;
-  console.log('A client connected.');
+  //socket.emit('connectsocket',{name:'name'});
+
+  socket.on('join_player',name => {
+    console.log('on join_player');
+    players[socket.id] = {
+      socketID: socket.id,
+      name: name
+    }
+    io.sockets.emit('get_players',players);
+    console.log('emit get_myself');
+    io.to(socket.id).emit('get_myself',players[socket.id]);
+  })
+
+  socket.on('clicked_tile',data => {
+    console.log('on clicked_tile');
+    console.log('emit someone_clicked_tile');
+    console.log(data);
+    io.sockets.emit('someone_clicked_tile',data);
+  })
+  //console.log(socket);
+  //console.log(socket.id);
+  /*
+  if(Object.keys(players).length >= 4){
+    console.log("満員です");
+    const msg = "満員です";
+
+    console.log('emit playerFull')
+    socket.to(socket.id).emit("playerFull",msg);
+
+    console.log('disconnect()')
+    socket.disconnect();
+  }
+
   socket.on('send',(payload) => {
+    console.log('on send')
     console.log(payload);
+    console.log('emit broadcast')
     socket.broadcast.emit('broadcast',payload);
+    console.log(players);
   });
+  socket.on('join_room',(payload)=>{
+    console.log('on join_room')
+    console.log(payload);
+    console.log('emit broadcast')
+    socket.broadcast.emit('broadcast',payload);
+  })
+  socket.on('addnewplayer',function(arraivalPlayerData){
+    console.log('on addnewPlayer')
+    console.log(arraivalPlayerData);
+    console.log('emit mySocketID')
+    socket.to(socket.id).emit('mySocketID',{
+      socketID: socket.id,
+      players : players
+    });
+    players[socket.id] = {
+      socketID: socket.id,
+      name: arraivalPlayerData.name
+    }
+    console.log(players);
+  })
+  
   socket.on('client_to_server_personal', function(data) {
+    console.log('on client_to_server_personal')
     //var id = socket.id;
     //io.to(id).emit('server_to_client', {value : user[index].color})
     console.log(data);
+    console.log('emit someone_disconnect')
     socket.broadcast.emit('someone_disconnect',data);
   });
+  */
+
+
   socket.on('disconnect', () => {
     console.log('Connection closed.');
+    delete players[socket.id];
+    io.sockets.emit('get_players',players);
   })
 })
+
+/*
+function splitArray(array, part) {
+    var tmp = [];
+    for(var i = 0; i < array.length; i += part) {
+        tmp.push(array.slice(i, i + part));
+    }
+    return tmp;
+}
+*/

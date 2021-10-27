@@ -1,11 +1,31 @@
 import React from 'react';
+import { Button } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
 
-const RuleDescription = () => {
+const useStyles = makeStyles({
+    button: {
+    }
+  });
+  
+const RuleDescription = ({onChangeState}) => {
+    const classes = useStyles();
+
+    const handleChangeState = () => {
+        onChangeState("lobby");
+    }
+
     return (
         <div className="RuleDescription"> 
             <h1>ルール説明画面</h1>
-            <Link to="/lobby"><p>lobby</p></Link>
+            <Button
+                className={classes.button}
+                component={Link}
+                to="/lobby"
+                onClick={handleChangeState}
+            >
+                lobby
+            </Button>
         </div>
     );
 }
