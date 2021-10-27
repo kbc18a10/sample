@@ -1,30 +1,52 @@
 import {useState, useEffect, useRef} from 'react';
 import {io} from 'socket.io-client';
-import Message from './Message';
 
 const Chat = ({name}) => {
-    const [messages, setMessages] = useState([{
-        name:'管理人',text:`ようこそ、${name}さん`
-    }]);
-
-    const [text, setText] = useState('');
+    const [players, setPlayers] = useState();
+    const [myself, setMyself] = useState();
 
     const socketRef = useRef();
 
     useEffect(() => {
         console.log('Connectinng..');
         socketRef.current = io();
+/*
+        socketRef.current.on('connectsocket',(msg) => {
+            console.log('CONNECT:' + msg['name']);
+        })
+        */
+        socketRef.current.emit('join_player',name);
+
+        socketRef.current.on('get_players',players => {
+            console.log('get_players');
+            setPlayers(players);
+            console.log(players);
+        })
+
+        socketRef.current.on('get_myself',myself => {
+            console.log('get_myself');
+            setMyself(myself);
+            console.log(myself);
+        })
+        
+        ///////////////////////////////
+        /*
         socketRef.current.on('broadcast', payload => {
             console.log('Recieved: ' + payload);
             setMessages(prevMessages => [...prevMessages, payload]);
         });
+        */
+        /////////////////////////////////
+
         return () => {
             console.log('Disconnecting..');
             socketRef.current.disconnect();
         };
     }, []);
 
-    const handleInputChange = (e) => {
+///////////////////////////////////////////////////
+/*
+const handleInputChange = (e) => {
         setText(e.target.value);
     }
 
@@ -37,24 +59,17 @@ const Chat = ({name}) => {
         setMessages(prevMessages => [...prevMessages, aMessage]);
         setText('');
     }
+    */
+    ////////////////////////////////////////////////
 
     return(
         <div>
-            <div className="input">
-                <input type="text" placeholder="メッセージ" value={text} onChange={handleInputChange} />
-                <button disabled={!text} onClick={handleButtonClick}>送信</button>
-            </div>
-            <ul>
-                {
-                    messages.map((msg,idx) => {
-                        return (
-                            <Message key={idx} name={msg.name} text={msg.text} />
-                        )
-                    })
-                }
-            </ul>
-            <button onClick={handleChangeState}></button>
-
+            player
+            {JSON.stringify(players)}
+            <br/>
+            myself
+            <br/>
+            {JSON.stringify(myself)}
 
         </div>
     )

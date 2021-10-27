@@ -4,7 +4,7 @@ import useChatService from './useChatService';
 
 const Chat2 = ({name}) => {
     const [messages, sendMessage] = useChatService({
-        name: '管理人', text: `ようこそ、${name}さん`
+        name: '管理人', text: `ようこそ、${name}さん`,name2:name
     });
 
     const [text, setText] = useState('');
@@ -13,8 +13,8 @@ const Chat2 = ({name}) => {
         setText(e.target.value);
     };
 
-    const handleButtonClick = (e) => {
-        sendMessage(name, text);
+    const handleButtonClick = () => {
+        sendMessage(name, text,'');
         setText('');
     }
 

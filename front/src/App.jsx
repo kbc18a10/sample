@@ -9,111 +9,114 @@ import Lobby from './pages/Lobby';
 import RuleDescription from './pages/RuleDescription';
 import Game from './pages/Game';
 import Result from './pages/Result';
-import SocketCommunication from './components/SocketCommunication';
-import {useState} from 'react';
-import Operation from './Operation';
-//import Chat from './Chat';
-import Chat2 from './Chat2';
-/*
-var STATE = {
-  home : {value : 0, string : 'Home', memo : 'home画面'},
-  main : {value : 1, string : 'Main', memo : 'main画面'},
-  game : {value : 2, string : 'Game', memo : 'game画面'}
-};
-*/
+import {useState, useEffect, useRef} from 'react';
+import {io} from 'socket.io-client';
+
+var STATE = ['home','lobby','rule','single','singleResult','multi','multiResult'];
+
 
 const App = () => {
 
-  /*const [state, setState] =　useState(STATE['home']);
+  const [name, setName] = useState('');
+  const [state, setState] =　useState(STATE[0]);
+  const [players, setPlayers] = useState();
+  const [myself, setMyself] = useState();
+  const [isSocket,setIsSocket] = useState(false);
+  const [clickedTileID, setClickedTileID] = useState();
+
+  const socketRef = useRef();
+
+  useEffect(()=>{
+    if(isSocket){
+      console.log('Connectinng..');
+      socketRef.current = io();
+      socketRef.current.emit('join_player',name);
+
+      socketRef.current.on('get_players',players => {
+          console.log('get_players');
+          setPlayers(players);
+          console.log(players);
+      })
+
+      socketRef.current.on('get_myself',myself => {
+          console.log('get_myself');
+          setMyself(myself);
+          console.log(myself);
+      })
+
+      socketRef.current.on('someone_clicked_tile',data => {
+        console.log('on someone_clicked_tile');
+        var element = document.getElementById(data['tileID']);
+        element.textContent = data['player']['name'];
+      })
+    }
+
+    return () => {
+      if(isSocket){
+        console.log('Disconnecting..');
+        socketRef.current.disconnect();
+        setMyself();
+        setPlayers();
+      }
+    }
+  },[isSocket])
+
+  useEffect(()=>{
+      if(clickedTileID){
+        socketRef.current.emit('clicked_tile',{player:myself,tileID:clickedTileID});
+      }
+  },[clickedTileID])
+
+  useEffect(()=>{
+    if(4 < STATE.indexOf(state)){
+      setIsSocket(true);
+    }else{
+      setIsSocket(false);
+    }
+  },[state])
+
 
   const handleSetState = (newState) => {
     setState(newState);
   }
 
-  const [isHome, setIsHome] = useState(true);
-
-  const handleSetIsHome = (flg) => {
-    setIsHome(flg)
-  }
-
-  console.log(isHome);
-
-
-  return (
-    <div className="App">
-      {/*state == STATE['home'] && <Home onChangeState={handleSetState}/>}
-      //state == STATE['game'] && <Game onChangeState={handleSetState}/>
-      state == STATE['main'] && <Main onChangeState={handleSetState}/> 
-      {/*isHome?
-        <div>
-          <Home onHome={handleSetIsHome}/>
-        </div>
-        :
-        <div>
-          <SocketCommunication/>
-          <Router>
-            <Switch>
-
-              {/*ロビー画面*//*
-              <Route path='/lobby' component={Lobby} />
-
-              {/*ルール説明画面*//*
-              <Route path='/rule-description' component={RuleDescription} />
-
-              {/*ゲーム画面*//*
-              <Route path='/game' component={Game} />
-
-              {/*結果画面*//*
-              <Route path='/result' component={Result} />
-
-            </Switch>
-          </Router>
-      </div>}
-
-    </div>
-  );
-  }
-  */
-
-  const [entered, setEntered] = useState(false);
-  const [name, setName] = useState('');
-
-  const handleEnter = (name) => {
-    setEntered(true);
+  const handleSetName = (name) => {
     setName(name);
   }
 
-  const handleLeave = () => {
-    setEntered(false);
+  const handleButtonClick = (id) => {
+    setClickedTileID(id);
   }
 
   return (
     <div className="App">
-      
+      {state}
       <Router>
         <Switch>
 
           {/*ロビー画面*/}
-          <Route path='/lobby' component={Lobby} />
+          <Route path="/lobby" render={() => <Lobby onChangeState={handleSetState} onSetName={handleSetName} name={name}/>} />
 
           {/*ルール説明画面*/}
-          <Route path='/rule-description' component={RuleDescription} />
+          <Route path="/rule-description" render={() => <RuleDescription onChangeState={handleSetState} />} />
 
           {/*ゲーム画面*/}
-          <Route path='/game' component={Game} />
+          <Route path="/game" render={() => <Game onChangeState={handleSetState} state={state} name={name} onButtonClick={(id) => handleButtonClick(id)}/> } />
 
           {/*結果画面*/}
-          <Route path='/result' component={Result} />
+          <Route path="/result" render={() => <Result onChangeState={handleSetState} name={name}/>} />
 
           {/*ホーム画面*/}
-          <Route path='/' component={Home} />
+          <Route path="/" render={() => <Home onChangeState={handleSetState} />} />
 
         </Switch>
       </Router>
       <div>
-      <Operation onEnter={handleEnter} onLeave={handleLeave} entered={entered} />
-      { entered && <Chat2 name={name} />}
-    </div>
+        myself:{JSON.stringify(myself)}
+      </div>
+      <div>
+        player:{JSON.stringify(players)}
+      </div>
     </div>
 
   );
