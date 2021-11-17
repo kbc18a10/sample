@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react';
 import Tile from './Tile';
 import {useEffectDebugger} from 'use-debugger-hooks';
 
-const TileTalbe = ({onTileClick, table}) => {
+const TileTalbe = React.memo(({onTileClick, table}) => {
     const [tableView,setTableView] = useState(changeTable)
 
     useEffectDebugger(() => {
@@ -32,6 +32,6 @@ const TileTalbe = ({onTileClick, table}) => {
             </table>
        </div>
     );
-}
+})
 
 export default TileTalbe;

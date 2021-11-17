@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 });
   
 
-const Game = ({onChangeState,state,name, onTileClick, onButtonReady, table}) => {
+const Game = React.memo(({onChangeState,state,name, onTileClick, onButtonReady, table, time}) => {
     const classes = useStyles();
     const [isReady,setIsReady] = useState(false);
  
@@ -53,13 +53,6 @@ const Game = ({onChangeState,state,name, onTileClick, onButtonReady, table}) => 
         }
     }
 
-    useEffectDebugger(() => {
-        if(table){
-          console.log(table);
-        }
-    },[table]);
-
-
     return (
         <div className="Game"> 
             <h1>ゲーム画面</h1>
@@ -73,14 +66,19 @@ const Game = ({onChangeState,state,name, onTileClick, onButtonReady, table}) => 
             >
                 result
             </Button>
-            ready?
-            <Button
-                className={isReady?classes.readyButton:classes.notReadyButton}
-                onClick={handleClickReady}
-            />
+            {!table
+            &&
+            <div>
+                <p>ready?</p>
+                <Button
+                    className={isReady?classes.readyButton:classes.notReadyButton}
+                    onClick={handleClickReady}
+                />
+            </div>
+            }
             
         </div>
     );
-}
+})
 
 export default Game

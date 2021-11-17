@@ -10,7 +10,7 @@ import RuleDescription from './pages/RuleDescription';
 import Game from './pages/Game';
 import Result from './pages/Result';
 import SocketCommunication from './components/SocketCommunication';
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect} from 'react';
 
 var STATE = ['home','lobby','rule','single','singleResult','multi','multiResult'];
 
@@ -19,6 +19,7 @@ const App = () => {
 
   const [name, setName] = useState('');
   const [state, setState] =　useState(STATE[0]);
+  const [isSingle, setIsSingle] = useState(true);
   const [clickedTileID, setClickedTileID] = useState();
   const [isReady,setIsReady] = useState(false);
   const [tileTable, setTileTable] = useState();
@@ -31,6 +32,12 @@ const App = () => {
     setState(newState);
     if(STATE.indexOf(newState)< 3){
       setIsReady(false);
+    }
+    if(STATE.indexOf(newState) == 3){
+      setIsSingle(true);
+    }
+    if(STATE.indexOf(newState) == 5){
+      setIsSingle(false);
     }
   }
 
@@ -50,6 +57,18 @@ const App = () => {
     setTileTable(table);
   } 
 
+  const handleSetStartTime = (data) => {
+    var dateCurrent = new Date().getTime();
+    var miliSecTurnning = data.startTime - dateCurrent
+    console.log("dead:"+data.startTime);
+    console.log("curr:"+dateCurrent);
+    console.log("mtur:"+miliSecTurnning);
+    setTimeout(()=>{
+      console.log("時間です");
+      setTileTable(data.table);
+    },miliSecTurnning);
+  }
+
   return (
     <div className="App">
       <Router>
@@ -62,7 +81,7 @@ const App = () => {
           <Route path="/rule-description" render={() => <RuleDescription onChangeState={handleSetState} />} />
 
           {/*ゲーム画面*/}
-          <Route path="/game" render={() => <Game onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable}/> } />
+          <Route path="/game" render={() => <Game onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable}/>} />
 
           {/*結果画面*/}
           <Route path="/result" render={() => <Result onChangeState={handleSetState} name={name}/>} />
@@ -72,7 +91,7 @@ const App = () => {
 
         </Switch>
       </Router>
-      {4 < STATE.indexOf(state) && <SocketCommunication name={name} clickedTileID={clickedTileID} isReady={isReady}  onChangeTileTable={(table) => handleChangeTileTable(table)}/>}
+      {2 < STATE.indexOf(state) && <SocketCommunication name={name} isSingle={isSingle} clickedTileID={clickedTileID} isReady={isReady}  onChangeTileTable={(table) => handleChangeTileTable(table)} onSetStartTime={(startTime) => handleSetStartTime(startTime)}/>}
     </div>
 
   );

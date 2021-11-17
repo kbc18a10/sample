@@ -3,7 +3,7 @@ import tileimg2 from '../images/tile2.png';
 import tileimg3 from '../images/tile3.png';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button} from '@material-ui/core';
-import {useState} from 'react';
+import React,{useState} from 'react';
 
 const useStyles = makeStyles({
     type0:{
@@ -36,7 +36,7 @@ const useStyles = makeStyles({
   });
 
 
-const Tile = ({id, type, onTileClick}) => {
+const Tile = React.memo(({id, type, onTileClick}) => {
     const classes = useStyles();
 
     const handleClicked = (e) => {
@@ -45,7 +45,7 @@ const Tile = ({id, type, onTileClick}) => {
     }
 
     const tile = () => {
-        console.log(type);
+        //console.log(type);
         if(type == 0){
             return <Button className={classes.type0} id={id} onClick={handleClicked} />
         }else if(type == 1){
@@ -58,6 +58,6 @@ const Tile = ({id, type, onTileClick}) => {
     } 
     
     return <div className="tile">{tile()}</div>
-}
+})
 
 export default Tile;

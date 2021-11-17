@@ -2,7 +2,7 @@ import {useState, useEffect, useRef} from 'react';
 import {io} from 'socket.io-client';
 import {useEffectDebugger} from 'use-debugger-hooks';
 
-const SocketCommunication = ({name, clickedTileID, isReady, onChangeTileTable}) => {
+const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTileTable, onSetStartTime}) => {
   const [players, setPlayers] = useState();
   const [myself, setMyself] = useState();
   const [inited, setinited] = useState(false);
@@ -13,8 +13,8 @@ const SocketCommunication = ({name, clickedTileID, isReady, onChangeTileTable}) 
   useEffect(()=>{
     console.log('Connectinng..');
     socketRef.current = io();
-    socketRef.current.emit('join_player',name);
-
+    socketRef.current.emit('join_player',{name:name,isSingle:isSingle});
+   
     socketRef.current.on('get_players',players => {
         console.log('get_players');
         setPlayers(players);
@@ -33,10 +33,10 @@ const SocketCommunication = ({name, clickedTileID, isReady, onChangeTileTable}) 
       onChangeTileTable(table);
     })
 
-    socketRef.current.on('all_ready',(table)=>{
+    socketRef.current.on('all_ready',(data)=>{
       console.log('on all_ready');
-      setTileTable(table);
-      onChangeTileTable(table);
+      setTileTable(data.table);
+      onSetStartTime(data);
     })
 
     return () => {
