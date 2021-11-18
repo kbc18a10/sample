@@ -9,17 +9,19 @@ const useStyles = makeStyles({
     }
   });
   
-const Lobby = ({onChangeState, onSetName, name}) => {
+const Lobby = ({onChangeState, onSetName, name, myself, players}) => {
     const [flg,setFlg ] = useState(false);
     const [playerName, setPlayerName] = useState(name);
     const classes = useStyles();
 
     const handleChangeStateSingle = () => {
         onChangeState("single");
+        setFlg(true);
     }
 
     const handleChangeStateMulti = () => {
         onChangeState("multi");
+        setFlg(true);
     }
 
     const handleChangeStateRule = () => {
@@ -31,31 +33,25 @@ const Lobby = ({onChangeState, onSetName, name}) => {
         setPlayerName(name);
     }
 
-    const handleSetFlg  = () => {
-        setFlg(true)
-    }
-
     return (
         <div className="Lobby"> 
             <h1>ロビー画面</h1>
             <Button
                 className={classes.button}
-                component={Link}
-                to="/game"
                 onClick={handleChangeStateSingle}
-                disabled={playerName.length == 0}
+                disabled={playerName.length == 0 || flg}
             >
                 single play
             </Button>
             <Button
                 className={classes.button}
-                component={Link}
-                to="/game"
+
                 onClick={handleChangeStateMulti}
-                disabled={playerName.length == 0}
+                disabled={playerName.length == 0 || flg}
             >
                 multi play
             </Button>
+            {flg&&myself&&players&&<Redirect to="/game" />}
             <Button
                 className={classes.button}
                 component={Link}
@@ -64,13 +60,7 @@ const Lobby = ({onChangeState, onSetName, name}) => {
             >
                 rule description
             </Button>
-            <Button
-                className={classes.button}
-                onClick={handleSetFlg}
-            >
-                redirect
-            </Button>
-            {flg&&<Redirect to="/" />}
+           
             <Operation onSetName={handleSetName} name={name}/> 
         </div>
     );

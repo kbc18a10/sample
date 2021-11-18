@@ -2,7 +2,7 @@ import {useState, useEffect, useRef} from 'react';
 import {io} from 'socket.io-client';
 import {useEffectDebugger} from 'use-debugger-hooks';
 
-const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTileTable, onSetStartTime}) => {
+const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTileTable, onSetStartTime, changeMyself, changePlayers}) => {
   const [players, setPlayers] = useState();
   const [myself, setMyself] = useState();
   const [inited, setinited] = useState(false);
@@ -18,13 +18,13 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
     socketRef.current.on('get_players',players => {
         console.log('get_players');
         setPlayers(players);
-        console.log(players);
+        changePlayers(players)
     })
 
     socketRef.current.on('get_myself',myself => {
         console.log('get_myself');
         setMyself(myself);
-        console.log(myself);
+        changeMyself(myself)
     })
 
     socketRef.current.on('someone_clicked_tile',table => {

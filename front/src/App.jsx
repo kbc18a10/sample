@@ -19,6 +19,8 @@ const App = () => {
 
   const [name, setName] = useState('');
   const [state, setState] =　useState(STATE[0]);
+  const [myself, setMyself] = useState();
+  const [players, setPlayers] = useState();
   const [isSingle, setIsSingle] = useState(true);
   const [clickedTileID, setClickedTileID] = useState();
   const [isReady,setIsReady] = useState(false);
@@ -32,6 +34,8 @@ const App = () => {
     setState(newState);
     if(STATE.indexOf(newState)< 3){
       setIsReady(false);
+      setMyself();
+      setPlayers();
     }
     if(STATE.indexOf(newState) == 3){
       setIsSingle(true);
@@ -43,6 +47,14 @@ const App = () => {
 
   const handleSetName = (name) => {
     setName(name);
+  }
+
+  const handleChangeMyself = (myself) => {
+    setMyself(myself);
+  }
+
+  const handleChangePlayers = (players) => {
+    setPlayers(players);
   }
 
   const handleTileClick = (id) => {
@@ -75,7 +87,7 @@ const App = () => {
         <Switch>
 
           {/*ロビー画面*/}
-          <Route path="/lobby" render={() => <Lobby onChangeState={handleSetState} onSetName={handleSetName} name={name}/>} />
+          <Route path="/lobby" render={() => <Lobby onChangeState={handleSetState} onSetName={handleSetName} name={name} myself={myself} players={players}/>} />
 
           {/*ルール説明画面*/}
           <Route path="/rule-description" render={() => <RuleDescription onChangeState={handleSetState} />} />
@@ -91,7 +103,7 @@ const App = () => {
 
         </Switch>
       </Router>
-      {2 < STATE.indexOf(state) && <SocketCommunication name={name} isSingle={isSingle} clickedTileID={clickedTileID} isReady={isReady}  onChangeTileTable={(table) => handleChangeTileTable(table)} onSetStartTime={(startTime) => handleSetStartTime(startTime)}/>}
+      {2 < STATE.indexOf(state) && <SocketCommunication name={name} changeMyself={(myself) => handleChangeMyself(myself)} changePlayers={(players) => handleChangePlayers(players)} isSingle={isSingle} clickedTileID={clickedTileID} isReady={isReady}  onChangeTileTable={(table) => handleChangeTileTable(table)} onSetStartTime={(startTime) => handleSetStartTime(startTime)}/>}
     </div>
 
   );
