@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import {Link} from 'react-router-dom';
+import {Link,Redirect} from 'react-router-dom';
 import TileTalbe from '../components/TileTable';
-import {useEffectDebugger} from 'use-debugger-hooks';
+import Time from '../components/Time';
 
 const useStyles = makeStyles({
     button: {
@@ -30,6 +30,7 @@ const useStyles = makeStyles({
 const Game = React.memo(({onChangeState,state,name, onTileClick, onButtonReady, table, time}) => {
     const classes = useStyles();
     const [isReady,setIsReady] = useState(false);
+    const [flg, setFlg] = useState(false);
  
     const handleChangeState = () => {
         if(state == "single"){
@@ -53,9 +54,18 @@ const Game = React.memo(({onChangeState,state,name, onTileClick, onButtonReady, 
         }
     }
 
+    const handleGameEnd = (flg) => {
+        console.log(flg);
+        if(flg){
+            setFlg(flg);
+        }
+    }
+
     return (
         <div className="Game"> 
             <h1>ゲーム画面</h1>
+            {table && <Time gameEnd={(flg)=>handleGameEnd(flg)}/>}
+            {flg&&<Redirect to="/result" />}
             name:{name}
             {table && <TileTalbe className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table}/>}
             <Button
