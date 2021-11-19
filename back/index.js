@@ -30,7 +30,7 @@ io.set( 'origins', '*:*' );
 */
 
 //すべてのプレイヤーリスト
-var maxPlayer = 2;
+var maxPlayer = 4;
 var waitPlayers = [];
 var multiPlayers = {};
 var multiTileTables = {};
