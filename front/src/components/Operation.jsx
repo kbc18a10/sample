@@ -18,7 +18,8 @@ const Operation = ({onSetName, name}) => {
 
     return (
         <div className="input">
-            <input type="text" ref={textInput} placeholder="1～8文字で入力してください" value={playerName} onChange={handleInputChange}/>
+            <span id="playerName">PlayerName:</span>
+            <input id="inputName" type="text" ref={textInput} placeholder="1～8文字で入力してください" value={playerName} onChange={handleInputChange}/>
         </div>
     );
 }

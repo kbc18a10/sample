@@ -1,0 +1,28 @@
+div.Lobby{
+    margin:50px
+}
+
+img.playbutton{
+    width:400px;
+    height:400px;
+}
+
+span#playerName{
+    color: #57464c;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+div.input{
+    width:fit-content;
+    margin:0 0 0 210px;
+    float:left;
+}
+
+input#inputName{
+    width:400px;
+    height:2.5rem;
+    font-size: 25px;
+    margin-top:10px;
+    color:#57464c;
+}

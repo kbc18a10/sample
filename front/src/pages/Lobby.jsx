@@ -1,11 +1,24 @@
 import React,{useState} from 'react';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import {Link,Redirect} from 'react-router-dom';
+import { Link, Redirect} from 'react-router-dom';
 import Operation from '../components/Operation';
+import img_singleplay from '../images/Lobby/singleplay.jpg';
+import img_multiplay from '../images/Lobby/multiplay.jpg';
+import img_lobbyrule from '../images/Lobby/LobbyRule.png'
+
+import '../css/Lobby.css'
 
 const useStyles = makeStyles({
-    button: {
+    playButton: {
+        width:"400px",
+        height:"400px",
+        margin:"30px 100px 80px 100px"
+    },
+    lobbyRuleButton:{
+        width:"300px",
+        height:"81px",
+        marginRight:"100px"
     }
   });
   
@@ -35,33 +48,34 @@ const Lobby = ({onChangeState, onSetName, name, myself, players}) => {
 
     return (
         <div className="Lobby"> 
-            <h1>ロビー画面</h1>
-            <Button
-                className={classes.button}
-                onClick={handleChangeStateSingle}
-                disabled={playerName.length == 0 || flg}
-            >
-                single play
-            </Button>
-            <Button
-                className={classes.button}
-
-                onClick={handleChangeStateMulti}
-                disabled={playerName.length == 0 || flg}
-            >
-                multi play
-            </Button>
+            <div className="playerButtons">
+                <Button
+                    className={classes.playButton}
+                    onClick={handleChangeStateSingle}
+                    disabled={playerName.length == 0 || flg}
+                >
+                    <img className="playbutton" src={img_singleplay}></img>
+                </Button>
+                <Button
+                    className={classes.playButton}
+                    onClick={handleChangeStateMulti}
+                    disabled={playerName.length == 0 || flg}
+                >
+                    <img className="playbutton" src={img_multiplay}></img>
+                </Button>
+            </div>
             {flg&&myself&&players&&<Redirect to="/game" />}
-            <Button
-                className={classes.button}
-                component={Link}
-                to="/rule-description"
-                onClick={handleChangeStateRule}
-            >
-                rule description
-            </Button>
-           
-            <Operation onSetName={handleSetName} name={name}/> 
+            <div className="bottomElems">
+                <Operation onSetName={handleSetName} name={name}/>
+                <Button
+                    className={classes.lobbyRuleButton}
+                    component={Link}
+                    to='rule-description'
+                    onClick={handleChangeStateRule}
+                >
+                    <img id="lobbyrule" src={img_lobbyrule}></img>
+                </Button>
+            </div>
         </div>
     );
 }

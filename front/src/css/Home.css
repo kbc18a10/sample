@@ -1,5 +1,11 @@
-div#back{
-    background-image: url("../images/LobbyRule.png");
-    height:400px;
-    width: 400px;
+div.Home{
+    background-image: url("../images/homehaikei2.jpg");
+    background-position:center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+div#homelogo{
+   margin-top: 0px;
+   padding-top: 100px;
 }

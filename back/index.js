@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
         console.log("emit get_players");
         io.to(socket.id).emit('get_players',singlePlayer);
         console.log('emit get_myself');
-        io.to(socket.id).emit('get_myself', multiPlayers[room][socket.id]);
+        io.to(socket.id).emit('get_myself', singlePlayer);
         var shuffleArray = array.arrayShuffle(tileArray)
         singleTileTable = array.splitArray(shuffleArray,rowLength);
         console.log('emit all_ready');
