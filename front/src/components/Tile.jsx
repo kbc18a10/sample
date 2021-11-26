@@ -45,7 +45,7 @@ const Tile = React.memo(({id, type, onTileClick}) => {
     }
 
     const tile = () => {
-        //console.log(type);
+        console.log("renderされました");
         if(type == 0){
             return <Button className={classes.type0} id={id} onClick={handleClicked} />
         }else if(type == 1){

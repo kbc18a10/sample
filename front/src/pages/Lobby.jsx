@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     }
   });
   
-const Lobby = ({onChangeState, onSetName, name, myself, players}) => {
+const Lobby = React.memo(({onChangeState, onSetName, name, myself, players}) => {
     const [flg,setFlg ] = useState(false);
     const [playerName, setPlayerName] = useState(name);
     const classes = useStyles();
@@ -78,6 +78,6 @@ const Lobby = ({onChangeState, onSetName, name, myself, players}) => {
             </div>
         </div>
     );
-}
+})
 
 export default Lobby

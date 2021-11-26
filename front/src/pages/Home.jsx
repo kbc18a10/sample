@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   });
   
 
-const Home = ({onChangeState}) => {
+const Home = React.memo(({onChangeState}) => {
     const classes = useStyles();
 
     const handleChangeState = () => {
@@ -34,6 +34,6 @@ const Home = ({onChangeState}) => {
             </Button>
         </div>
     );
-}
+})
 
 export default Home

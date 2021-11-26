@@ -2,7 +2,7 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
 } from 'react-router-dom';
 import Home from './pages/Home';
 import Lobby from './pages/Lobby';
@@ -10,12 +10,12 @@ import RuleDescription from './pages/RuleDescription';
 import Game from './pages/Game';
 import Result from './pages/Result';
 import SocketCommunication from './components/SocketCommunication';
-import {useState, useEffect} from 'react';
+import {useState, useEffect,useCallback} from 'react';
 
 var STATE = ['home','lobby','rule','single','singleResult','multi','multiResult'];
 
 
-const App = () => {
+const App = React.memo(() => {
 
   const [name, setName] = useState('');
   const [state, setState] =　useState(STATE[0]);
@@ -57,9 +57,9 @@ const App = () => {
     setPlayers(players);
   }
 
-  const handleTileClick = (id) => {
+  const handleTileClick = useCallback((id) => {
     setClickedTileID(id);
-  }
+  })
 
   const handleIsReady = (flg) => {
     setIsReady(flg);
@@ -93,10 +93,10 @@ const App = () => {
           <Route path="/rule-description" render={() => <RuleDescription onChangeState={handleSetState} />} />
 
           {/*ゲーム画面*/}
-          <Route path="/game" render={() => <Game onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable}/>} />
+          <Route path="/game" render={() => <Game players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable}/>} />
 
           {/*結果画面*/}
-          <Route path="/result" render={() => <Result onChangeState={handleSetState} name={name}/>} />
+          <Route path="/result" render={() => <Result id={myself} onChangeState={handleSetState} name={name}/>} />
 
           {/*ホーム画面*/}
           <Route path="/" render={() => <Home onChangeState={handleSetState} />} />
@@ -107,6 +107,6 @@ const App = () => {
     </div>
 
   );
-}
+})
 
 export default App;

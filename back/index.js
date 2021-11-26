@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
 const http = require('http');
+process.on('uncaughtException', function(err) {
+  console.log(err);
+});
+
 const server = http.createServer(app);
 const {Server} = require("socket.io");
 const io = new Server(server);
@@ -31,12 +35,12 @@ io.set( 'origins', '*:*' );
 
 //すべてのプレイヤーリスト
 var maxPlayer = 4;
-var waitPlayers = [];
+// var waitPlayers = [];
 var multiPlayers = {};
 var multiTileTables = {};
 
-var tileNum = 20;
-var tileNum0 = 20;
+var tileNum = 40;
+var tileNum0 = 40;
 var rowLength = 16;
 var tileArray0 = [...Array(tileNum0)].map(()=>{return 0});
 var tileArray1 = [...Array(tileNum)].map(()=>{return 1});
@@ -112,37 +116,42 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('get_myself', singlePlayer);
         var shuffleArray = array.arrayShuffle(tileArray)
         singleTileTable = array.splitArray(shuffleArray,rowLength);
+        console.log(singleTileTable);
         console.log('emit all_ready');
         io.to(socket.id).emit('all_ready',{table:singleTileTable,startTime:getStartTime()});
       }else{
-        multiPlayers[room][data.player.socketID].ready = data.isReady;
-        console.log("emit get_players");
-        io.to(room).emit('get_players', multiPlayers[room]);
-        console.log('emit get_myself');
-        io.to(socket.id).emit('get_myself', multiPlayers[room][socket.id]);
-        //var deleteWaitPlayers = [];
-        var count = 0;
-        for(let key in multiPlayers[room]){
-          if(key == "isGameStart"){
-            continue;
-          }
-          if(multiPlayers[room][key].ready){
-            count++;
-          }
-          //deleteWaitPlayers.push(room+":"+key);
-        }
-        //console.log(deleteWaitPlayers.length);
-        if(Object.keys(multiPlayers[room]).length == count + 1){
-          var shuffleArray = array.arrayShuffle(tileArray)
-          multiTileTables[room] = array.splitArray(shuffleArray,rowLength);
-          multiPlayers[room]["isGameStart"] = true;
-          console.log('emit all_ready');
-          io.to(room).emit('all_ready',{table:multiTileTables[room],startTime:getStartTime()});
-          //waitPlayers = waitPlayers.filter(wp => !deleteWaitPlayers.includes(wp))
-        }
+        multiSetReady();
       }
       
     })
+
+    function multiSetReady(){
+      multiPlayers[room][socket.id].ready =  multiPlayers[room][socket.id].ready?false:true;
+      console.log("emit get_players");
+      io.to(room).emit('get_players', multiPlayers[room]);
+      console.log('emit get_myself');
+      io.to(socket.id).emit('get_myself', multiPlayers[room][socket.id]);
+      //var deleteWaitPlayers = [];
+      var count = 0;
+      for(let key in multiPlayers[room]){
+        if(key == "isGameStart"){
+          continue;
+        }
+        if(multiPlayers[room][key].ready){
+          count++;
+        }
+        //deleteWaitPlayers.push(room+":"+key);
+      }
+      //console.log(deleteWaitPlayers.length);
+      if(Object.keys(multiPlayers[room]).length == count + 1){
+        var shuffleArray = array.arrayShuffle(tileArray)
+        multiTileTables[room] = array.splitArray(shuffleArray,rowLength);
+        multiPlayers[room]["isGameStart"] = true;
+        console.log('emit all_ready');
+        io.to(room).emit('all_ready',{table:multiTileTables[room],startTime:getStartTime()});
+        //waitPlayers = waitPlayers.filter(wp => !deleteWaitPlayers.includes(wp))
+      }
+    }
 
     socket.on('clicked_tile',data => {
       console.log('on clicked_tile');
@@ -188,6 +197,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log('Connection closed.');
       if(!isSingle){
+        multiSetReady();
         delete multiPlayers[room][socket.id];
         if(Object.keys(multiPlayers[room]).length == 0){
           delete multiPlayers[room];

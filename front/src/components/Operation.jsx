@@ -1,6 +1,6 @@
-import {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
-const Operation = ({onSetName, name}) => {
+const Operation = React.memo(({onSetName, name}) => {
     const [playerName, setName] = useState('');
     const textInput = useRef(null);
 
@@ -12,16 +12,16 @@ const Operation = ({onSetName, name}) => {
     },[]);
 
     const handleInputChange = (e) => {
-        setName(e.target.value.substring(0,8));
-        onSetName(e.target.value.substring(0,8))
+        setName(e.target.value.substring(0,15));
+        onSetName(e.target.value.substring(0,15))
     };
 
     return (
         <div className="input">
             <span id="playerName">PlayerName:</span>
-            <input id="inputName" type="text" ref={textInput} placeholder="1～8文字で入力してください" value={playerName} onChange={handleInputChange}/>
+            <input id="inputName" type="text" ref={textInput} placeholder="1～15文字で入力してください" value={playerName} onChange={handleInputChange}/>
         </div>
     );
-}
+})
 
 export default Operation;

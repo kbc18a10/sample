@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import {Link,Redirect} from 'react-router-dom';
@@ -27,10 +27,18 @@ const useStyles = makeStyles({
 });
   
 
-const Game = React.memo(({onChangeState,state,name, onTileClick, onButtonReady, table, time}) => {
+const Game = React.memo(({players, onChangeState,state,name, onTileClick, onButtonReady, table}) => {
     const classes = useStyles();
     const [isReady,setIsReady] = useState(false);
     const [flg, setFlg] = useState(false);
+    const [playerScores, setPlayerScores] = useState();
+    // useEffect(()=>{
+    //     setPlayerScores(players.map((key)=>{
+    //         if(!players[key]["isGameStart"]){
+    //             return ("PlayerName:"+players[key]["name"]+" Score:"+players[key]["score"]);
+    //         }
+    //     }));
+    // },[players])
  
     const handleChangeState = () => {
         if(state == "single"){
@@ -40,9 +48,9 @@ const Game = React.memo(({onChangeState,state,name, onTileClick, onButtonReady, 
         }
     }
 
-    const handleTileClick = (id) => {
+    const handleTileClick = useCallback((id) => {
         onTileClick(id);
-    }
+    })
 
     const handleClickReady = () => {
         if(isReady){
@@ -63,7 +71,8 @@ const Game = React.memo(({onChangeState,state,name, onTileClick, onButtonReady, 
 
     return (
         <div className="Game"> 
-            <h1>ゲーム画面</h1>
+            {!players && <Redirect to="/"/>}
+            {playerScores}
             {table && <Time gameEnd={(flg)=>handleGameEnd(flg)}/>}
             {flg&&<Redirect to="/result" />}
             name:{name}

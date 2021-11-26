@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import {Link} from 'react-router-dom';
+import {Link,Redirect} from 'react-router-dom';
 
 const useStyles = makeStyles({
     button: {
@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   });
   
 
-const Result = ({onChangeState,name}) => {
+const Result = ({id,onChangeState,name}) => {
     const classes = useStyles();
 
     const handleChangeStateHome = () => {
@@ -22,6 +22,7 @@ const Result = ({onChangeState,name}) => {
 
     return (
         <div className="Result"> 
+            {!id && <Redirect to="/"/>}
             <h1>結果画面</h1>
             name:{name}
             <Button
