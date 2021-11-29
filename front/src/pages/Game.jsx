@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useCallback} from 'react';
+import {useEffectDebugger} from 'use-debugger-hooks';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import {Link,Redirect} from 'react-router-dom';
@@ -31,14 +32,21 @@ const Game = React.memo(({players, onChangeState,state,name, onTileClick, onButt
     const classes = useStyles();
     const [isReady,setIsReady] = useState(false);
     const [flg, setFlg] = useState(false);
-    const [playerScores, setPlayerScores] = useState();
-    // useEffect(()=>{
-    //     setPlayerScores(players.map((key)=>{
-    //         if(!players[key]["isGameStart"]){
-    //             return ("PlayerName:"+players[key]["name"]+" Score:"+players[key]["score"]);
-    //         }
-    //     }));
-    // },[players])
+    const [playerScores, setPlayerScores] = useState("unoe");
+
+    useEffectDebugger(()=>{
+        var array = [];
+        for(var key in players){
+            if(key != "isGameStart"){
+                array.push({name:players[key]["name"],score:players[key]["score"]});
+            }
+        } 
+        console.log(array);
+        var array2 = array.map((p)=>{
+            return <div className="playerscore"><p>{p["name"]}</p><p>{p["score"]}</p></div>
+        })
+        setPlayerScores(array2);
+    },[players])
  
     const handleChangeState = () => {
         if(state == "single"){
@@ -72,7 +80,6 @@ const Game = React.memo(({players, onChangeState,state,name, onTileClick, onButt
     return (
         <div className="Game"> 
             {!players && <Redirect to="/"/>}
-            {playerScores}
             {table && <Time gameEnd={(flg)=>handleGameEnd(flg)}/>}
             {flg&&<Redirect to="/result" />}
             name:{name}
@@ -85,6 +92,10 @@ const Game = React.memo(({players, onChangeState,state,name, onTileClick, onButt
             >
                 result
             </Button>
+            {playerScores[0]}
+            {playerScores[1]}
+            {playerScores[2]}
+            {playerScores[3]}
             {!table
             &&
             <div>
