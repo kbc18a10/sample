@@ -3,7 +3,7 @@ import { useCountdownTimer } from 'use-countdown-timer'
 
 const Time = ({gameEnd}) => {
     const { countdown, start, reset, pause, isRunning } = useCountdownTimer({
-        timer: 1000 * 30,
+        timer: 1000 * 10,
     });
 
     useEffect(()=>{

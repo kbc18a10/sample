@@ -25,12 +25,14 @@ const App = React.memo(() => {
   const [clickedTileID, setClickedTileID] = useState();
   const [isReady,setIsReady] = useState(false);
   const [tileTable, setTileTable] = useState();
-
+  const [leavePlayer, setLeavePlayer] = useState();
+  // const [playerScores, setPlayerScores] = useState();
   useEffect(() => {
     setClickedTileID();
   },[clickedTileID])
 
   const handleSetState = (newState) => {
+    console.log("changeState:"+newState);
     setState(newState);
     if(STATE.indexOf(newState)< 3){
       setIsReady(false);
@@ -69,6 +71,15 @@ const App = React.memo(() => {
     setTileTable(table);
   } 
 
+  const handleLeavePlayer = (player) => {
+    setLeavePlayer(player);
+  }
+
+  // const handlePlayerScores = (playerScores) => {
+  //   console.log(playerScores)
+  //   setPlayerScores(playerScores);
+  // }
+
   const handleSetStartTime = (data) => {
     var dateCurrent = new Date().getTime();
     var miliSecTurnning = data.startTime - dateCurrent
@@ -93,9 +104,11 @@ const App = React.memo(() => {
           <Route path="/rule-description" render={() => <RuleDescription onChangeState={handleSetState} />} />
 
           {/*ゲーム画面*/}
-          <Route path="/game" render={() => <Game players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable}/>} />
+          {/* <Route path="/game" render={() => <Game  leavePlayer={leavePlayer} players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable} onPlayerScores={(playerScores) => handlePlayerScores(playerScores)}/>} /> */}
+          <Route path="/game" render={() => <Game leavePlayer={leavePlayer} players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable}/>} />
 
           {/*結果画面*/}
+          {/* <Route path="/result" render={() => <Result id={myself} onChangeState={handleSetState} playerScores={playerScores}/>} /> */}
           <Route path="/result" render={() => <Result id={myself} onChangeState={handleSetState} name={name}/>} />
 
           {/*ホーム画面*/}
@@ -103,7 +116,7 @@ const App = React.memo(() => {
 
         </Switch>
       </Router>
-      {2 < STATE.indexOf(state) && <SocketCommunication name={name} changeMyself={(myself) => handleChangeMyself(myself)} changePlayers={(players) => handleChangePlayers(players)} isSingle={isSingle} clickedTileID={clickedTileID} isReady={isReady}  onChangeTileTable={(table) => handleChangeTileTable(table)} onSetStartTime={(startTime) => handleSetStartTime(startTime)}/>}
+      {2 < STATE.indexOf(state) && <SocketCommunication name={name} changeMyself={(myself) => handleChangeMyself(myself)} changePlayers={(players) => handleChangePlayers(players)} isSingle={isSingle} clickedTileID={clickedTileID} isReady={isReady}  onChangeTileTable={(table) => handleChangeTileTable(table)} onSetStartTime={(startTime) => handleSetStartTime(startTime)} onPlayerLeave={(player)=>handleLeavePlayer(player)}/>}
     </div>
 
   );
