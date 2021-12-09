@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Link,Redirect} from 'react-router-dom';
 import TileTalbe from '../components/TileTable';
 import Time from '../components/Time';
+import '../css/Game.css';
 
 const useStyles = makeStyles({
     button: {
@@ -28,31 +29,82 @@ const useStyles = makeStyles({
 });
   
 
-const Game = React.memo(({players, onChangeState,state,name, onTileClick, onButtonReady, table}) => {
+const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTileClick, onButtonReady, table/*, onPlayerScores*/}) => {
     const classes = useStyles();
     const [isReady,setIsReady] = useState(false);
     const [flg, setFlg] = useState(false);
-    const [playerScores, setPlayerScores] = useState("unoe");
+    const [init,isInit] = useState(false);
+    const [playerInfo, setPlayerInfo] = useState();
+    const [playerScores, setPlayerScores] = useState();
+    const [leavePlayers, setLeavePlayers] = useState([]);
+
 
     useEffectDebugger(()=>{
-        var array = [];
-        for(var key in players){
-            if(key != "isGameStart"){
-                array.push({name:players[key]["name"],score:players[key]["score"]});
+        if(table){
+            if(!init){
+                var array = [];
+                for(var key in players){
+                    if(key != "isGameStart"){
+                        array.push({name:players[key]["name"],score:players[key]["score"]});
+                    }
+                } 
+                setPlayerInfo(array);
+                console.log(array);
+                isInit(true);
             }
-        } 
-        console.log(array);
-        var array2 = array.map((p)=>{
-            return <div className="playerscore"><p>{p["name"]}</p><p>{p["score"]}</p></div>
-        })
-        setPlayerScores(array2);
+        }
+    },[table])
+
+    useEffectDebugger(()=>{
+        if(table){
+            var array = leavePlayers;
+            array.push(leavePlayer);
+            console.log(array);
+            setLeavePlayers(array);
+        }
+    },[leavePlayer])
+
+    useEffectDebugger(()=>{
+        if(table){
+            var w_playerInfo = playerInfo;
+            console.log(players);
+            for(var key1 in players){
+                var pname = players[key1]["name"];
+                for(var key2 in playerInfo){
+                    if(playerInfo[key2]["name"]==pname){
+                        w_playerInfo[key2]["score"] = players[key1]["score"];
+                    };   
+                }
+            } 
+            var array = w_playerInfo.map((p,i)=>{
+                var id = "player" + i;
+                return <div className="playerscore" id={id}><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
+            })
+            setPlayerInfo(w_playerInfo);
+            setPlayerScores(array);
+        }else{
+            console.log(JSON.stringify(players));
+            var array = [];
+            var keys = Object.keys(players);
+            if(0<=keys.indexOf('isGameStart')){
+                keys.splice(keys.indexOf('isGameStart'),1)
+            }
+            for(var i = 0; i < keys.length;i++){
+                console.log(players[keys[i]]);
+                var id = "player" + i;
+                array.push(<div className="playerscore" id={id}><span id="playername">PlayerName:{players[keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players[keys[i]]["score"]}</span></div>)
+            }
+            setPlayerScores(array);
+        }
     },[players])
  
     const handleChangeState = () => {
         if(state == "single"){
             onChangeState("singleResult");
+            // onPlayerScores(playerInfo);
         }else{
             onChangeState("multiResult");
+            // onPlayerScores(playerInfo);
         }
     }
 
@@ -74,6 +126,13 @@ const Game = React.memo(({players, onChangeState,state,name, onTileClick, onButt
         console.log(flg);
         if(flg){
             setFlg(flg);
+            if(state == "single"){
+                onChangeState("singleResult");
+                // onPlayerScores(playerInfo);
+            }else{
+                onChangeState("multiResult");
+                // onPlayerScores(playerInfo);
+            }
         }
     }
 
@@ -81,7 +140,7 @@ const Game = React.memo(({players, onChangeState,state,name, onTileClick, onButt
         <div className="Game"> 
             {!players && <Redirect to="/"/>}
             {table && <Time gameEnd={(flg)=>handleGameEnd(flg)}/>}
-            {flg&&<Redirect to="/result" />}
+            {flg && <Redirect to="/result"/> }
             name:{name}
             {table && <TileTalbe className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table}/>}
             <Button

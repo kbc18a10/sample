@@ -2,11 +2,10 @@ import {useState, useEffect, useRef} from 'react';
 import {io} from 'socket.io-client';
 import {useEffectDebugger} from 'use-debugger-hooks';
 
-const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTileTable, onSetStartTime, changeMyself, changePlayers}) => {
+const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTileTable, onSetStartTime, changeMyself, changePlayers, onPlayerLeave}) => {
   const [players, setPlayers] = useState();
   const [myself, setMyself] = useState();
   const [inited, setinited] = useState(false);
-  const [tileTable, setTileTable] = useState();
 
   const socketRef = useRef();
 
@@ -17,6 +16,7 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
    
     socketRef.current.on('get_players',players => {
         console.log('get_players');
+        console.log(players)
         setPlayers(players);
         changePlayers(players)
     })
@@ -29,20 +29,23 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
 
     socketRef.current.on('someone_clicked_tile',table => {
       console.log('on someone_clicked_tile');
-      setTileTable(table);
       onChangeTileTable(table);
     })
 
     socketRef.current.on('all_ready',(data)=>{
       console.log('on all_ready');
-      setTileTable(data.table);
       onSetStartTime(data);
+    })
+
+    socketRef.current.on('player_leave',(data)=>{
+      console.log('on player_leave');
+      console.log(data);
+      onPlayerLeave(data)
     })
 
     return () => {
       console.log('Disconnecting..');
       socketRef.current.disconnect();
-      setTileTable();
       onChangeTileTable();
       setMyself();
       setPlayers();

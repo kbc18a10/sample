@@ -11,7 +11,7 @@ const io = new Server(server);
 const array =  require('./array');
 
 const path = require('path');
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8089;
 
 server.listen(port, () => {
   console.log(`listening on *:${port}`);
@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
       isSingle = data.isSingle;
 
       if(isSingle){
-        singlePlayer = {
+        singlePlayer[socket.id] = {
           socketID: socket.id,
           name: data.name,
           ready:false,
@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
     socket.on('set_isReady',data => {
       console.log('on set_isReady');
       if(isSingle){
-        singlePlayer.ready = data.isReady;
+        singlePlayer[socket.id].ready = data.isReady;
         console.log("emit get_players");
         io.to(socket.id).emit('get_players',singlePlayer);
         console.log('emit get_myself');
@@ -160,9 +160,9 @@ io.on('connection', (socket) => {
       var deleteTiles = clickedTileJudge(data,isSingle);
       if(isSingle){
         if(deleteTiles && deleteTiles.length == 0){
-          singlePlayer.score -= 5;
+          singlePlayer[socket.id].score -= 5;
         }else if(deleteTiles){
-          singlePlayer.score += deleteTiles.length;
+          singlePlayer[socket.id].score += deleteTiles.length;
         }
         deleteTiles.forEach((cell)=>{
           console.log(cell);
@@ -198,6 +198,14 @@ io.on('connection', (socket) => {
       console.log('Connection closed.');
       if(!isSingle){
         multiSetReady();
+        // var keys = Object.keys(multiPlayers[room]);
+        // var index = 0;
+        // for(var i = 1;i<keys.length;i++){
+        //   if(keys[i]==socket.id){
+        //     index = (i-1)
+        //   }
+        // }
+        io.to(room).emit('player_leave',{name:multiPlayers[room][socket.id]["name"],score:multiPlayers[room][socket.id]["score"]});
         delete multiPlayers[room][socket.id];
         if(Object.keys(multiPlayers[room]).length == 0){
           delete multiPlayers[room];
