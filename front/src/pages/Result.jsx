@@ -15,12 +15,24 @@ const Result = ({id,onChangeState,name,playerScores}) => {
     const [scores, setScores] = useState("");
     useEffectDebugger(()=>{
         console.log(playerScores);
-
+        console.log(playerScores);
+        playerScores.sort(function(a,b){
+            if(a.score > b.score) return -1;
+            if(a.score < b.score) return 1;
+            return 0;
+        });
         var array = playerScores.map((p,i)=>{
             var id = "player" + i;
-            return <div className="playerscore" id={id}><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
+            var rank = "1st"
+            if(i == 1){
+                rank = "2nd"
+            }else if(i == 2){
+                rank = "3rd"
+            }else if(i == 3){
+                rank = "4th"
+            }
+            return <div className="playerscore" id={id}><span className='rank' id="rank">{rank}</span><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
         })
-
         setScores(array);
     },[playerScores])
 
