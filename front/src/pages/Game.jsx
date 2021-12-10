@@ -29,15 +29,14 @@ const useStyles = makeStyles({
 });
   
 
-const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTileClick, onButtonReady, table/*, onPlayerScores*/}) => {
+const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTileClick, onButtonReady, table, onPlayerScores}) => {
     const classes = useStyles();
     const [isReady,setIsReady] = useState(false);
     const [flg, setFlg] = useState(false);
     const [init,isInit] = useState(false);
     const [playerInfo, setPlayerInfo] = useState();
-    const [playerScores, setPlayerScores] = useState();
+    const [playerScores, setPlayerScores] = useState(new Array(4));
     const [leavePlayers, setLeavePlayers] = useState([]);
-
 
     useEffectDebugger(()=>{
         if(table){
@@ -67,7 +66,6 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
     useEffectDebugger(()=>{
         if(table){
             var w_playerInfo = playerInfo;
-            console.log(players);
             for(var key1 in players){
                 var pname = players[key1]["name"];
                 for(var key2 in playerInfo){
@@ -98,16 +96,6 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
         }
     },[players])
  
-    const handleChangeState = () => {
-        if(state == "single"){
-            onChangeState("singleResult");
-            // onPlayerScores(playerInfo);
-        }else{
-            onChangeState("multiResult");
-            // onPlayerScores(playerInfo);
-        }
-    }
-
     const handleTileClick = useCallback((id) => {
         onTileClick(id);
     })
@@ -123,16 +111,9 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
     }
 
     const handleGameEnd = (flg) => {
-        console.log(flg);
         if(flg){
             setFlg(flg);
-            if(state == "single"){
-                onChangeState("singleResult");
-                // onPlayerScores(playerInfo);
-            }else{
-                onChangeState("multiResult");
-                // onPlayerScores(playerInfo);
-            }
+            onPlayerScores(playerInfo)
         }
     }
 
@@ -140,21 +121,13 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
         <div className="Game"> 
             {!players && <Redirect to="/"/>}
             {table && <Time gameEnd={(flg)=>handleGameEnd(flg)}/>}
-            {flg && <Redirect to="/result"/> }
+            {flg&&<Redirect to="/result" />}
             name:{name}
             {table && <TileTalbe className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table}/>}
-            <Button
-                className={classes.button}
-                component={Link}
-                to="/result"
-                onClick={handleChangeState}
-            >
-                result
-            </Button>
-            {playerScores[0]}
-            {playerScores[1]}
-            {playerScores[2]}
-            {playerScores[3]}
+            {playerScores[0]?playerScores[0]:<></>}
+            {playerScores[1]?playerScores[1]:<></>}
+            {playerScores[2]?playerScores[2]:<></>}
+            {playerScores[3]?playerScores[3]:<></>}
             {!table
             &&
             <div>

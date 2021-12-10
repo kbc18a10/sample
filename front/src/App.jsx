@@ -18,7 +18,7 @@ var STATE = ['home','lobby','rule','single','singleResult','multi','multiResult'
 const App = React.memo(() => {
 
   const [name, setName] = useState('');
-  const [state, setState] =　useState(STATE[0]);
+  const [state, setState] = useState(STATE[0]);
   const [myself, setMyself] = useState();
   const [players, setPlayers] = useState();
   const [isSingle, setIsSingle] = useState(true);
@@ -26,13 +26,13 @@ const App = React.memo(() => {
   const [isReady,setIsReady] = useState(false);
   const [tileTable, setTileTable] = useState();
   const [leavePlayer, setLeavePlayer] = useState();
-  // const [playerScores, setPlayerScores] = useState();
+  const [playerScores, setPlayerScores] = useState();
+
   useEffect(() => {
     setClickedTileID();
   },[clickedTileID])
 
   const handleSetState = (newState) => {
-    console.log("changeState:"+newState);
     setState(newState);
     if(STATE.indexOf(newState)< 3){
       setIsReady(false);
@@ -71,15 +71,6 @@ const App = React.memo(() => {
     setTileTable(table);
   } 
 
-  const handleLeavePlayer = (player) => {
-    setLeavePlayer(player);
-  }
-
-  // const handlePlayerScores = (playerScores) => {
-  //   console.log(playerScores)
-  //   setPlayerScores(playerScores);
-  // }
-
   const handleSetStartTime = (data) => {
     var dateCurrent = new Date().getTime();
     var miliSecTurnning = data.startTime - dateCurrent
@@ -90,6 +81,14 @@ const App = React.memo(() => {
       console.log("時間です");
       setTileTable(data.table);
     },miliSecTurnning);
+  }
+
+  const handleLeavePlayer = (player) => {
+    setLeavePlayer(player);
+  }
+
+  const handlePlayerScores = (playerScores) => {
+    setPlayerScores(playerScores)
   }
 
   return (
@@ -104,12 +103,10 @@ const App = React.memo(() => {
           <Route path="/rule-description" render={() => <RuleDescription onChangeState={handleSetState} />} />
 
           {/*ゲーム画面*/}
-          {/* <Route path="/game" render={() => <Game  leavePlayer={leavePlayer} players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable} onPlayerScores={(playerScores) => handlePlayerScores(playerScores)}/>} /> */}
-          <Route path="/game" render={() => <Game leavePlayer={leavePlayer} players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable}/>} />
-
+          <Route path="/game" render={() => <Game leavePlayer={leavePlayer} players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable} onPlayerScores={(playerScores) => handlePlayerScores(playerScores)}/>} />
+         
           {/*結果画面*/}
-          {/* <Route path="/result" render={() => <Result id={myself} onChangeState={handleSetState} playerScores={playerScores}/>} /> */}
-          <Route path="/result" render={() => <Result id={myself} onChangeState={handleSetState} name={name}/>} />
+          <Route path="/result" render={() => <Result id={myself} onChangeState={handleSetState} playerScores={playerScores}/>} />
 
           {/*ホーム画面*/}
           <Route path="/" render={() => <Home onChangeState={handleSetState} />} />

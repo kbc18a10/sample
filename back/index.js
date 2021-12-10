@@ -11,7 +11,7 @@ const io = new Server(server);
 const array =  require('./array');
 
 const path = require('path');
-const port = process.env.PORT || 8089;
+const port = process.env.PORT || 3001;
 
 server.listen(port, () => {
   console.log(`listening on *:${port}`);
@@ -198,13 +198,6 @@ io.on('connection', (socket) => {
       console.log('Connection closed.');
       if(!isSingle){
         multiSetReady();
-        // var keys = Object.keys(multiPlayers[room]);
-        // var index = 0;
-        // for(var i = 1;i<keys.length;i++){
-        //   if(keys[i]==socket.id){
-        //     index = (i-1)
-        //   }
-        // }
         io.to(room).emit('player_leave',{name:multiPlayers[room][socket.id]["name"],score:multiPlayers[room][socket.id]["score"]});
         delete multiPlayers[room][socket.id];
         if(Object.keys(multiPlayers[room]).length == 0){

@@ -10,14 +10,19 @@ const useStyles = makeStyles({
   });
   
 
-const Result = ({id,onChangeState,name}) => {
-    const [players,setPlayers] = useState();
+const Result = ({id,onChangeState,name,playerScores}) => {
     const classes = useStyles();
+    const [scores, setScores] = useState("");
+    useEffectDebugger(()=>{
+        console.log(playerScores);
 
-    // useEffectDebugger(()=>{
-    //     setPlayers(playerScores);
-    //     console.log(players);
-    // },[playerScores])
+        var array = playerScores.map((p,i)=>{
+            var id = "player" + i;
+            return <div className="playerscore" id={id}><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
+        })
+
+        setScores(array);
+    },[playerScores])
 
     const handleChangeStateHome = () => {
         onChangeState("home");
@@ -30,8 +35,7 @@ const Result = ({id,onChangeState,name}) => {
     return (
         <div className="Result"> 
             {!id && <Redirect to="/"/>}
-            <h1>結果画面</h1>
-            playerScores:{name}
+            {scores}
             <Button
                 className={classes.button}
                 component={Link}
