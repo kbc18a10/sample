@@ -159,32 +159,34 @@ io.on('connection', (socket) => {
       console.log(data);
       var deleteTiles = clickedTileJudge(data,isSingle);
       if(isSingle){
-        if(deleteTiles && deleteTiles.length == 0){
-          singlePlayer[socket.id].score -= 5;
-        }else if(deleteTiles){
-          singlePlayer[socket.id].score += deleteTiles.length;
+        if(deleteTiles.onTile && deleteTiles.deleteTiles.length == 0){
+          singlePlayer[socket.id].score = (singlePlayer[socket.id].score - 5 < 0) ? 0: singlePlayer[socket.id].score - 5;
+        }else if(deleteTiles.onTile){
+          singlePlayer[socket.id].score += deleteTiles.deleteTiles.length;
         }
-        deleteTiles.forEach((cell)=>{
-          console.log(cell);
-          singleTileTable[cell.i][cell.j] = 0;
-        })
-
+        if(deleteTiles.onTile){
+          deleteTiles.deleteTiles.forEach((cell)=>{
+            console.log(cell);
+            singleTileTable[cell.i][cell.j] = 0;
+          })
+        }
         console.log("emit get_players");
         io.to(socket.id).emit('get_players',singlePlayer);
         console.log('emit get_myself');
         io.to(socket.id).emit('get_myself',singlePlayer);
         io.to(socket.id).emit('someone_clicked_tile',singleTileTable);
       }else{
-        if(deleteTiles && deleteTiles.length == 0){
-          multiPlayers[room][socket.id].score -= 5;
-        }else if(deleteTiles){
-          multiPlayers[room][socket.id].score += deleteTiles.length;
+        if(deleteTiles.onTile && deleteTiles.deleteTiles.length == 0){
+          multiPlayers[room][socket.id].score = (multiPlayers[room][socket.id].score - 5 < 0) ? 0: multiPlayers[room][socket.id].score - 5;
+        }else if(deleteTiles.onTile){
+          multiPlayers[room][socket.id].score += deleteTiles.deleteTiles.length;
         }
-        deleteTiles.forEach((cell)=>{
-          console.log(cell);
-          multiTileTables[room][cell.i][cell.j] = 0;
-        })
-
+        if(deleteTiles.onTile){
+          deleteTiles.deleteTiles.forEach((cell)=>{
+            console.log(cell);
+            multiTileTables[room][cell.i][cell.j] = 0;
+          })
+        }
         console.log("emit get_players");
         io.to(room).emit('get_players',multiPlayers[room]);
         console.log('emit get_myself');
@@ -247,7 +249,7 @@ io.on('connection', (socket) => {
       var table = isSingle ? singleTileTable:multiTileTables[room];
       if(table[i][j] == 0){
         //タイルがないところをクリック
-        let match = [];
+        let match = []; 
         let matchNum = [...Array(10)].map(()=>{return 0});
         let matchIndex = [];
         //上方向
@@ -295,10 +297,12 @@ io.on('connection', (socket) => {
           }
         })
   
-        return deleteTiles = deleteTiles.filter(v => v);
+        deleteTiles = deleteTiles.filter(v => v);
+
+        return {onTile: true, deleteTiles:deleteTiles} 
       }else{
         //タイルがあるところをクリック
-        return [];
+        return {onTile: false};
       }
     }
 
