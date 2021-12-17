@@ -37,6 +37,7 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
       console.log('on all_ready');
       setTileTable(data.table);
       onSetStartTime(data);
+      console.log(data.startTime);
     })
 
     socketRef.current.on('player_leave',(data)=>{
