@@ -31,7 +31,7 @@ const Result = ({id,onChangeState,name,playerScores}) => {
             }else if(i == 3){
                 rank = "4th"
             }
-            return <div className="playerscore" id={id}><span className='rank' id="rank">{rank}</span><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
+            return <div className="playerResultScore" id={id}><span className='rank' id="rank">{rank}</span><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
         })
         setScores(array);
     },[playerScores])

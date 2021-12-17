@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     playButton: {
         width:"400px",
         height:"400px",
-        margin:"30px 100px 80px 100px"
+        margin:"30px 100px 40px 100px"
     },
     lobbyRuleButton:{
         width:"300px",

@@ -24,7 +24,6 @@ const TileTalbe = React.memo(({onTileClick, table}) => {
         setComponentTable(componentTable.map((row,i)=>{
             return row.map((t,j)=>{
                 if(array[0][i][j]!=array[1][i][j]){
-                    console.log("aaaaaa");
                     return <td><Tile id={"tile"+i+"-"+j} type={array[1][i][j]} onTileClick={(id) => handleTileClick(id)}/></td>
                 }else{
                     return t;
@@ -34,21 +33,13 @@ const TileTalbe = React.memo(({onTileClick, table}) => {
         setTables(array);
     },[table]);
 
-    // const componentTable = tables[0].map((row,i) => {
-    //     return row.map((col,j)=>{
-    //         return(
-    //             <td><Tile id={"tile"+i+"-"+j} type={tables[0][i][j]} onTileClick={(id) => handleTileClick(id)}/></td>
-    //         )
-    //     })
-    // })
-
     const handleTileClick = useCallback((id) => {
         onTileClick(id)
     })
 
     return (
         <div className="tileTable">
-            <table>
+            <table id="tileTable">
             {componentTable.map((row) => {
                 return (
                     <tr>{row}</tr>

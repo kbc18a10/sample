@@ -76,7 +76,7 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
             } 
             var array = w_playerInfo.map((p,i)=>{
                 var id = "player" + i;
-                return <div className="playerscore" id={id}><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
+                return <div className="playerGameSocre" id={id}><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
             })
             setPlayerInfo(w_playerInfo);
             setPlayerScores(array);
@@ -90,7 +90,7 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
             for(var i = 0; i < keys.length;i++){
                 console.log(players[keys[i]]);
                 var id = "player" + i;
-                array.push(<div className="playerscore" id={id}><span id="playername">PlayerName:{players[keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players[keys[i]]["score"]}</span></div>)
+                array.push(<div className="playerGameSocre" id={id}><span id="playername">PlayerName:{players[keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players[keys[i]]["score"]}</span></div>)
             }
             setPlayerScores(array);
         }
@@ -120,24 +120,29 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
     return (
         <div className="Game"> 
             {!players && <Redirect to="/"/>}
-            {table && <Time gameEnd={(flg)=>handleGameEnd(flg)}/>}
             {flg&&<Redirect to="/result" />}
-            name:{name}
-            {table && <TileTalbe className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table}/>}
-            {playerScores[0]?playerScores[0]:<></>}
-            {playerScores[1]?playerScores[1]:<></>}
-            {playerScores[2]?playerScores[2]:<></>}
-            {playerScores[3]?playerScores[3]:<></>}
-            {!table
-            &&
-            <div>
-                <p>ready?</p>
-                <Button
-                    className={isReady?classes.readyButton:classes.notReadyButton}
-                    onClick={handleClickReady}
-                />
+            <div className='topContext'>
+                {playerScores[0]?playerScores[0]:<div className='playerGameSocre'/>}
+                {table ? <Time gameEnd={(flg)=>handleGameEnd(flg)}/>:<div className="time"></div>}
+                {playerScores[1]?playerScores[1]:<div className='playerGameSocre'/>}
             </div>
-            }
+            {table ? <TileTalbe className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table}/>
+            :
+            <div className='dummytileTable'> {!table
+                &&
+                <div>
+                    <p>ready?</p>
+                    <Button
+                        className={isReady?classes.readyButton:classes.notReadyButton}
+                        onClick={handleClickReady}
+                    />
+                </div>
+                }</div>}
+            <div className='bottomContext'>
+                {playerScores[2]?playerScores[2]:<div className='playerGameSocre'/>}
+                {playerScores[3]?playerScores[3]:<div className='playerGameSocre'/>}
+            </div>
+           
             
         </div>
     );

@@ -7,31 +7,35 @@ import React,{useState} from 'react';
 
 const useStyles = makeStyles({
     type0:{
-        minWidth:'25px',
-        width:"25px",
-        height:"25px",
-        display:"inline-block"
+        minWidth:'26px',
+        width:"26px",
+        height:"26px",
+        display:"inline-block",
+        margin:"2px"
     },
     type1: {
         backgroundImage: `url(${tileimg1})`,
-        minWidth:'25px',
-        width:"25px",
-        height:"25px",
-        display:"inline-block"
+        minWidth:'26px',
+        width:"26px",
+        height:"26px",
+        display:"inline-block",
+        margin:"2px"
     },
     type2: {
         backgroundImage: `url(${tileimg2})`,
-        minWidth:'25px',
-        width:"25px",
-        height:"25px",
-        display:"inline-block"
+        minWidth:'26px',
+        width:"26px",
+        height:"26px",
+        display:"inline-block",
+        margin:"2px"
     },
     type3: {
         backgroundImage: `url(${tileimg3})`,
-        minWidth:'25px',
-        width:"25px",
-        height:"25px",
-        display:"inline-block"
+        minWidth:'26px',
+        width:"26px",
+        height:"26px",
+        display:"inline-block",
+        margin:"2px"
     }
   });
 
@@ -47,12 +51,16 @@ const Tile = React.memo(({id, type, onTileClick}) => {
     const tile = () => {
         console.log("renderされました");
         if(type == 0){
+            // return <div className={classes.type0} id={id} onClick={handleClicked} />
             return <Button className={classes.type0} id={id} onClick={handleClicked} />
         }else if(type == 1){
+            // return <div className={classes.type1} id={id} onClick={handleClicked} />
             return <Button className={classes.type1} id={id} onClick={handleClicked} />
         }else if(type == 2){
+            // return <div className={classes.type2} id={id} onClick={handleClicked} />
             return <Button className={classes.type2} id={id} onClick={handleClicked} />
         }else if(type == 3){
+            // return <div className={classes.type3} id={id} onClick={handleClicked} />
             return <Button className={classes.type3} id={id} onClick={handleClicked} />
         }
     } 

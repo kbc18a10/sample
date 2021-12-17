@@ -43,6 +43,15 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
       console.log('on player_leave');
       onPlayerLeave(data)
     })
+    // var x, y, prevX, prevY;
+    // var intervalID = window.setInterval(function(){
+      
+    //   if (prevX !== x || !prevY !== y) {
+    //     socket.emit('mouse_position', {mx : x, my : y});
+    //   }
+    //   prevX = x;
+    //   prevY = y;
+    // }, 500);
 
     return () => {
       console.log('Disconnecting..');
@@ -51,6 +60,7 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
       onChangeTileTable();
       setMyself();
       setPlayers();
+      // window.clearInterval(intervalID);
     }
   },[])
 

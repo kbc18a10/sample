@@ -1,17 +1,71 @@
-div.playerscore{
+div.tileTable{
+    background-image: url('../images/Game/Gamemasu.png');
+    width:1320px;
+    height:510px;
+    margin-left:23px;
+}
+div.dummytileTable{
+    width:1320px;
+    height:510px;
+    margin-left:23px;
+}
+
+table#tileTable{
+    border-spacing:0;
+    
+}
+
+table#tileTable td{
+    padding:0;
+}
+
+div.playerGameSocre{
+    width:400px;
+    height:50px;
+}
+
+div.playerResultScore{
     width:300px;
     height:50px;
 }
 
+div.topContext{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0px 23px;
+}
+
+div.topContext div{
+    text-align: center;
+    font-size: 30px; 
+}
+
+div.time{
+    font-size:40px;
+}
+
+div.bottomContext{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0px 23px;
+}
+
+div.bottomContext div{
+    text-align: center;
+    font-size: 30px; 
+}
+
 #player0{
-    background-color: cyan;   
+    color: cyan;   
 }
 #player1{
-    background-color:rgb(224, 94, 94)   
+    color:rgb(224, 94, 94)   
 }
 #player2{
-    background-color: rgb(56, 184, 5);   
+    color: rgb(56, 184, 5);   
 }
 #player3{
-    background-color: rgb(186, 55, 226);   
+    color: rgb(186, 55, 226);   
 }

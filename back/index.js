@@ -39,9 +39,9 @@ var maxPlayer = 4;
 var multiPlayers = {};
 var multiTileTables = {};
 
-var tileNum = 40;
-var tileNum0 = 40;
-var rowLength = 16;
+var tileNum = 187;
+var tileNum0 = 187;
+var rowLength = 44;
 var tileArray0 = [...Array(tileNum0)].map(()=>{return 0});
 var tileArray1 = [...Array(tileNum)].map(()=>{return 1});
 var tileArray2 = [...Array(tileNum)].map(()=>{return 2});
