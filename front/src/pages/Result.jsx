@@ -15,7 +15,6 @@ const Result = ({id,onChangeState,name,playerScores}) => {
     const [scores, setScores] = useState("");
     useEffectDebugger(()=>{
         console.log(playerScores);
-        console.log(playerScores);
         playerScores.sort(function(a,b){
             if(a.score > b.score) return -1;
             if(a.score < b.score) return 1;

@@ -3,7 +3,7 @@ import {useEffectDebugger} from 'use-debugger-hooks';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import {Link,Redirect} from 'react-router-dom';
-import TileTalbe from '../components/TileTable';
+import TileTable from '../components/TileTable';
 import Time from '../components/Time';
 import '../css/Game.css';
 
@@ -33,29 +33,40 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
     const classes = useStyles();
     const [isReady,setIsReady] = useState(false);
     const [flg, setFlg] = useState(false);
-    const [init,isInit] = useState(false);
+    // const [init,isInit] = useState(false);
+    const [isStartFlg, setIsStartFlg] = useState(false);
     const [playerInfo, setPlayerInfo] = useState();
     const [playerScores, setPlayerScores] = useState(new Array(4));
     const [leavePlayers, setLeavePlayers] = useState([]);
 
     useEffectDebugger(()=>{
-        if(table){
-            if(!init){
-                var array = [];
-                for(var key in players){
-                    if(key != "isGameStart"){
-                        array.push({name:players[key]["name"],score:players[key]["score"]});
-                    }
-                } 
-                setPlayerInfo(array);
-                console.log(array);
-                isInit(true);
+        if(table.startTime>0){
+            if(!isStartFlg){
+                var dateCurrent = new Date().getTime();
+                var miliSecTurnning = table.startTime - dateCurrent
+                console.log("dead:"+table.startTime);
+                console.log("curr:"+dateCurrent);
+                console.log("mtur:"+miliSecTurnning);
+                setTimeout(()=>{
+                    setIsStartFlg(true);
+                    console.log(new Date().getTime());
+                    console.log("時間です");
+                    console.log(new Date().getTime());
+                    var array = [];
+                    for(var key in players){
+                        if(key != "isGameStart"){
+                            array.push({name:players[key]["name"],score:players[key]["score"]});
+                        }
+                    } 
+                    setPlayerInfo(array);
+                    console.log(array);
+                },miliSecTurnning);
             }
         }
     },[table])
 
     useEffectDebugger(()=>{
-        if(table){
+        if(table.startTime == 0){
             var array = leavePlayers;
             array.push(leavePlayer);
             console.log(array);
@@ -64,14 +75,15 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
     },[leavePlayer])
 
     useEffectDebugger(()=>{
-        if(table){
+        if(table.startTime == 0){
+            console.log("a");
             var w_playerInfo = playerInfo;
             for(var key1 in players){
                 var pname = players[key1]["name"];
                 for(var key2 in playerInfo){
                     if(playerInfo[key2]["name"]==pname){
                         w_playerInfo[key2]["score"] = players[key1]["score"];
-                    };   
+                    };
                 }
             } 
             var array = w_playerInfo.map((p,i)=>{
@@ -123,12 +135,12 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
             {flg&&<Redirect to="/result" />}
             <div className='topContext'>
                 {playerScores[0]?playerScores[0]:<div className='playerGameSocre'/>}
-                {table ? <Time gameEnd={(flg)=>handleGameEnd(flg)}/>:<div className="time"></div>}
+                {isStartFlg ? <Time gameEnd={(flg)=>handleGameEnd(flg)}/>:<div className="time"></div>}
                 {playerScores[1]?playerScores[1]:<div className='playerGameSocre'/>}
             </div>
-            {table ? <TileTalbe className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table}/>
+            {isStartFlg ? <TileTable className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table.table}/>
             :
-            <div className='dummytileTable'> {!table
+            <div className='dummytileTable'> {!isStartFlg
                 &&
                 <div>
                     <p>ready?</p>

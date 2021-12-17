@@ -24,7 +24,7 @@ const App = React.memo(() => {
   const [isSingle, setIsSingle] = useState(true);
   const [clickedTileID, setClickedTileID] = useState();
   const [isReady,setIsReady] = useState(false);
-  const [tileTable, setTileTable] = useState();
+  const [tileTable, setTileTable] = useState({table:[],startTime:-1});
   const [leavePlayer, setLeavePlayer] = useState();
   const [playerScores, setPlayerScores] = useState();
 
@@ -38,6 +38,7 @@ const App = React.memo(() => {
       setIsReady(false);
       setMyself();
       setPlayers();
+      setTileTable({table:[],startTime:-1})
     }
     if(STATE.indexOf(newState) == 3){
       setIsSingle(true);
@@ -68,21 +69,22 @@ const App = React.memo(() => {
   }
 
   const handleChangeTileTable = (table) => {
-    setTileTable(table);
+    setTileTable({table:table,startTime:0});
   } 
 
   const handleSetStartTime = (data) => {
-    var dateCurrent = new Date().getTime();
-    var miliSecTurnning = data.startTime - dateCurrent
-    console.log("dead:"+data.startTime);
-    console.log("curr:"+dateCurrent);
-    console.log("mtur:"+miliSecTurnning);
-    setTimeout(()=>{
-      console.log(new Date().getTime());
-      console.log("時間です");
-      setTileTable(data.table);
-      console.log(new Date().getTime());
-    },miliSecTurnning);
+    setTileTable(data);
+    // var dateCurrent = new Date().getTime();
+    // var miliSecTurnning = data.startTime - dateCurrent
+    // console.log("dead:"+data.startTime);
+    // console.log("curr:"+dateCurrent);
+    // console.log("mtur:"+miliSecTurnning);
+    // setTimeout(()=>{
+    //   console.log(new Date().getTime());
+    //   console.log("時間です");
+    //   setTileTable(data);
+    //   console.log(new Date().getTime());
+    // },miliSecTurnning);
   }
 
   const handleLeavePlayer = (player) => {
