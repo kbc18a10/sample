@@ -308,7 +308,7 @@ io.on('connection', (socket) => {
 
     function getStartTime(){
       var d = new Date();
-      d.setSeconds(d.getSeconds() + 1);
+      d.setSeconds(d.getSeconds() + 3);
       return d.getTime();
     }
 
