@@ -44,20 +44,19 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
             if(!isStartFlg){
                 var dateCurrent = new Date().getTime();
                 var miliSecTurnning = table.startTime - dateCurrent
-                console.log("dead:"+table.startTime);
-                console.log("curr:"+dateCurrent);
-                console.log("mtur:"+miliSecTurnning);
+                // console.log("dead:"+table.startTime);
+                // console.log("curr:"+dateCurrent);
+                // console.log("mtur:"+miliSecTurnning);
                 setTimeout(()=>{
-                    setIsStartFlg(true);
-                    console.log(new Date().getTime());
-                    console.log("時間です");
-                    console.log(new Date().getTime());
+                    // console.log(new Date().getTime());
+                    // console.log("時間です");
                     var array = [];
                     for(var key in players){
                         if(key != "isGameStart"){
                             array.push({name:players[key]["name"],score:players[key]["score"]});
                         }
                     } 
+                    setIsStartFlg(true);
                     setPlayerInfo(array);
                     console.log(array);
                 },miliSecTurnning);
