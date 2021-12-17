@@ -81,6 +81,7 @@ const App = React.memo(() => {
       console.log(new Date().getTime());
       console.log("時間です");
       setTileTable(data.table);
+      console.log(new Date().getTime());
     },miliSecTurnning);
   }
 
