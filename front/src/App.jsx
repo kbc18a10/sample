@@ -78,6 +78,7 @@ const App = React.memo(() => {
     console.log("curr:"+dateCurrent);
     console.log("mtur:"+miliSecTurnning);
     setTimeout(()=>{
+      console.log(new Date().getTime());
       console.log("時間です");
       setTileTable(data.table);
     },miliSecTurnning);
