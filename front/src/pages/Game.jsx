@@ -52,6 +52,7 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                 setPlayerInfo(array);
                 var dateCurrent = new Date().getTime();
                 var miliSecTurnning = table.startTime - dateCurrent
+                console.log(miliSecTurnning);
                 // console.log("dead:"+table.startTime);
                 // console.log("curr:"+dateCurrent);
                 // console.log("mtur:"+miliSecTurnning);
