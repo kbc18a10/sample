@@ -52,7 +52,7 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                 } 
                 setPlayerInfo(array);
                 var start = axios.head(window.location.href).then(res => {
-                    return new Date(res.headers.date).getTime() + 1000;
+                    return new Date(res.headers.date).getTime() + 3000;
                 })
                 var now = axios.head(window.location.href).then(res => {
                     return new Date(res.headers.date).getTime();
