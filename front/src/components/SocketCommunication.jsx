@@ -34,7 +34,6 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
     socketRef.current.on('all_ready',(data)=>{
       console.log('on all_ready');
       onSetStartTime(data);
-      console.log(data.startTime);
     })
 
     socketRef.current.on('player_leave',(data)=>{

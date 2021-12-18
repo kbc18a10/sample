@@ -73,17 +73,6 @@ const App = React.memo(() => {
 
   const handleSetStartTime = (data) => {
     setTileTable(data);
-    // var dateCurrent = new Date().getTime();
-    // var miliSecTurnning = data.startTime - dateCurrent
-    // console.log("dead:"+data.startTime);
-    // console.log("curr:"+dateCurrent);
-    // console.log("mtur:"+miliSecTurnning);
-    // setTimeout(()=>{
-    //   console.log(new Date().getTime());
-    //   console.log("時間です");
-    //   setTileTable(data);
-    //   console.log(new Date().getTime());
-    // },miliSecTurnning);
   }
 
   const handleLeavePlayer = (player) => {
