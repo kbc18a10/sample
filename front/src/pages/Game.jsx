@@ -5,7 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Link,Redirect} from 'react-router-dom';
 import TileTable from '../components/TileTable';
 import Time from '../components/Time';
+import axios from 'axios';
 import '../css/Game.css';
+
 
 const useStyles = makeStyles({
     button: {
@@ -49,17 +51,14 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                     }
                 } 
                 setPlayerInfo(array);
-                var dateCurrent = new Date().getTime();
-                var miliSecTurnning = table.startTime - dateCurrent
-                console.log("dead:"+table.startTime);
-                console.log("curr:"+dateCurrent);
-                console.log("mtur:"+miliSecTurnning);
+                var miliSecTurnning = axios.head(window.location.href).then(res => {
+                    return new Date(res.headers.date);
+                })
                 setTimeout(()=>{
-                    // console.log(new Date().getTime());
                     // console.log("時間です");
-                    console.log(playerInfo);
                     setIsStartFlg(true);
-                },miliSecTurnning);
+                    
+                },1000);
             }
         }
     },[table])

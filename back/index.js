@@ -307,9 +307,9 @@ io.on('connection', (socket) => {
     }
 
     function getStartTime(){
-      var d = new Date();
-      d.setSeconds(d.getSeconds() + 1);
-      return d.getTime();
+      var time = new Date().getTime();
+      console.log(time);
+      return time + 1000
     }
 
     //マッチングの定期処理]

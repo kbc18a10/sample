@@ -33,6 +33,7 @@ const App = React.memo(() => {
   },[clickedTileID])
 
   const handleSetState = (newState) => {
+    
     setState(newState);
     if(STATE.indexOf(newState)< 3){
       setIsReady(false);
