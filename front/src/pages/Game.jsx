@@ -51,14 +51,15 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                     }
                 } 
                 setPlayerInfo(array);
-                var miliSecTurnning = axios.head(window.location.href).then(res => {
-                    return new Date(res.headers.date);
+                var start = axios.head(window.location.href).then(res => {
+                    return new Date(res.headers.date).getTime() + 1000;
+                })
+                var now = axios.head(window.location.href).then(res => {
+                    return new Date(res.headers.date).getTime();
                 })
                 setTimeout(()=>{
-                    // console.log("時間です");
-                    setIsStartFlg(true);
-                    
-                },1000);
+                    setIsStartFlg(true);                    
+                },(start-now));
             }
         }
     },[table])
