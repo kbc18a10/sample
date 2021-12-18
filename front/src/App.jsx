@@ -38,7 +38,6 @@ const App = React.memo(() => {
       setIsReady(false);
       setMyself();
       setPlayers();
-      setTileTable({table:[],startTime:-1})
     }
     if(STATE.indexOf(newState) == 3){
       setIsSingle(true);
@@ -69,7 +68,7 @@ const App = React.memo(() => {
   }
 
   const handleChangeTileTable = (table) => {
-    setTileTable({table:table,startTime:0});
+    setTileTable(table);
   } 
 
   const handleSetStartTime = (data) => {

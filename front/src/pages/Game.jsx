@@ -40,8 +40,16 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
     const [leavePlayers, setLeavePlayers] = useState([]);
 
     useEffectDebugger(()=>{
+        console.log(table.startTime)
         if(table.startTime>0){
             if(!isStartFlg){
+                var array = [];
+                for(var key in players){
+                    if(key != "isGameStart"){
+                        array.push({name:players[key]["name"],score:players[key]["score"]});
+                    }
+                } 
+                setPlayerInfo(array);
                 var dateCurrent = new Date().getTime();
                 var miliSecTurnning = table.startTime - dateCurrent
                 // console.log("dead:"+table.startTime);
@@ -50,15 +58,8 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                 setTimeout(()=>{
                     // console.log(new Date().getTime());
                     // console.log("時間です");
-                    var array = [];
-                    for(var key in players){
-                        if(key != "isGameStart"){
-                            array.push({name:players[key]["name"],score:players[key]["score"]});
-                        }
-                    } 
+                    console.log(playerInfo);
                     setIsStartFlg(true);
-                    setPlayerInfo(array);
-                    console.log(array);
                 },miliSecTurnning);
             }
         }

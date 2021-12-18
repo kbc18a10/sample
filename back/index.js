@@ -202,7 +202,7 @@ io.on('connection', (socket) => {
         multiSetReady();
         io.to(room).emit('player_leave',{name:multiPlayers[room][socket.id]["name"],score:multiPlayers[room][socket.id]["score"]});
         delete multiPlayers[room][socket.id];
-        if(Object.keys(multiPlayers[room]).length == 0){
+        if(Object.keys(multiPlayers[room]).length == 1){
           delete multiPlayers[room];
           delete multiTileTables[room];
         }
@@ -308,7 +308,7 @@ io.on('connection', (socket) => {
 
     function getStartTime(){
       var d = new Date();
-      d.setSeconds(d.getSeconds() + 3);
+      d.setSeconds(d.getSeconds() + 1);
       return d.getTime();
     }
 
