@@ -60,6 +60,7 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                     militime = start-now;
                     console.log(militime);
                     setTimeout(()=>{
+                        console.log(new Date(res.headers.date).getTime());
                         setIsStartFlg(true);                    
                     },(militime));
                 })
