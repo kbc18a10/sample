@@ -51,15 +51,16 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                     }
                 } 
                 setPlayerInfo(array);
-                var start = axios.head(window.location.href).then(res => {
-                    return new Date(res.headers.date).getTime() + 3000;
+                var militime;
+                axios.head(window.location.href).then(res => {
+                    var start = new Date(res.headers.date).getTime() + 3000;
+                    var now = new Date().getTime();
+                    militime = start-now;
+                    setTimeout(()=>{
+                        setIsStartFlg(true);                    
+                    },(militime));
                 })
-                var now = axios.head(window.location.href).then(res => {
-                    return new Date(res.headers.date).getTime();
-                })
-                setTimeout(()=>{
-                    setIsStartFlg(true);                    
-                },(start-now));
+                
             }
         }
     },[table])
