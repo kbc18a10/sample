@@ -1,0 +1,60 @@
+div.Result{
+    background-image: url("../images/Result/result.png");
+    background-position:center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+div.winner{
+    position: absolute;
+    top:145px;
+    width:100%;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bolder; 
+}
+
+span#winner{
+    font-size:50px;
+    font-weight: bolder;
+}
+
+div#scores {
+    position: absolute;
+    width:1366px;
+    top:280px;
+    /* background-color: #eee;     背景色指定 */
+    /* padding:  10px;             余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    /* justify-content:center; */
+}
+ 
+div.playerResultScore {
+    font-size: 33px;
+    font-weight: 700; 
+    text-align: center;
+    /* color:  #fff;               文字色 */
+    margin: auto;              /* 外側の余白 */
+    /* border-radius:  5px;        角丸指定 */
+     width: 25%;                /* 幅指定 */
+}
+ 
+
+div.Result div#buttons{
+    position: absolute;
+    left:427px;
+    bottom:40px;
+}
+
+#result0{
+    color: cyan;   
+}
+#result1{
+    color:rgb(224, 94, 94);
+}
+#result2{
+    color: rgb(56, 184, 5);  
+}
+#result3{
+    color: rgb(186, 55, 226);
+}

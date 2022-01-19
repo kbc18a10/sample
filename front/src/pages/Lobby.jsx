@@ -3,8 +3,8 @@ import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, Redirect} from 'react-router-dom';
 import Operation from '../components/Operation';
-import img_singleplay from '../images/Lobby/singleplay.jpg';
-import img_multiplay from '../images/Lobby/multiplay.jpg';
+import img_singleplay from '../images/Lobby/singleplay.png';
+import img_multiplay from '../images/Lobby/multiplay.png';
 import img_lobbyrule from '../images/Lobby/LobbyRule.png'
 
 import '../css/Lobby.css'
@@ -13,12 +13,10 @@ const useStyles = makeStyles({
     playButton: {
         width:"400px",
         height:"400px",
-        margin:"30px 100px 40px 100px"
+        margin:"30px 100px 10px 100px"
     },
     lobbyRuleButton:{
-        width:"300px",
-        height:"81px",
-        marginRight:"100px"
+        marginRight:"66px"
     }
   });
   

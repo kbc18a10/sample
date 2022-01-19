@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {useEffectDebugger} from 'use-debugger-hooks';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import {Link,Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import TileTable from '../components/TileTable';
 import Time from '../components/Time';
 import axios from 'axios';
@@ -45,9 +45,11 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
         if(table.startTime>0){
             if(!isStartFlg){
                 var array = [];
+                var id = 0;
                 for(var key in players){
                     if(key != "isGameStart"){
-                        array.push({name:players[key]["name"],score:players[key]["score"]});
+                        array.push({name:players[key]["name"],score:players[key]["score"],id:id});
+                        id++;
                     }
                 } 
                 setPlayerInfo(array);
@@ -84,7 +86,6 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
 
     useEffectDebugger(()=>{
         if(table.startTime == 0){
-            console.log("a");
             var w_playerInfo = playerInfo;
             for(var key1 in players){
                 var pname = players[key1]["name"];
@@ -96,7 +97,7 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
             } 
             var array = w_playerInfo.map((p,i)=>{
                 var id = "player" + i;
-                return <div className="playerGameSocre" id={id}><span id="playername">PlayerName:{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
+                return <div className={'playerGameSocre'} id={id}><span id="playername">{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
             })
             setPlayerInfo(w_playerInfo);
             setPlayerScores(array);
@@ -110,7 +111,7 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
             for(var i = 0; i < keys.length;i++){
                 console.log(players[keys[i]]);
                 var id = "player" + i;
-                array.push(<div className="playerGameSocre" id={id}><span id="playername">PlayerName:{players[keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players[keys[i]]["score"]}</span></div>)
+                array.push(<div className="playerGameSocre" id={id}><span id="playername">{players[keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players[keys[i]]["score"]}</span></div>)
             }
             setPlayerScores(array);
         }
@@ -133,13 +134,15 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
     const handleGameEnd = (flg) => {
         if(flg){
             setFlg(flg);
+            playerInfo.map((info)=>{
+                console.log(info);
+            })
             onPlayerScores(playerInfo)
         }
     }
 
     return (
         <div className="Game"> 
-            {!players && <Redirect to="/"/>}
             {flg&&<Redirect to="/result" />}
             <div className='topContext'>
                 {playerScores[0]?playerScores[0]:<div className='playerGameSocre'/>}

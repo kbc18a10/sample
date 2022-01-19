@@ -20,12 +20,7 @@ table#tileTable td{
 }
 
 div.playerGameSocre{
-    width:400px;
-    height:50px;
-}
-
-div.playerResultScore{
-    width:300px;
+    width:632px;
     height:50px;
 }
 
@@ -37,7 +32,6 @@ div.topContext{
 }
 
 div.topContext div{
-    text-align: center;
     font-size: 30px; 
 }
 
@@ -53,19 +47,22 @@ div.bottomContext{
 }
 
 div.bottomContext div{
-    text-align: center;
     font-size: 30px; 
 }
 
 #player0{
     color: cyan;   
+    text-align: left;
 }
 #player1{
-    color:rgb(224, 94, 94)   
+    color:rgb(224, 94, 94);
+    text-align: right;
 }
 #player2{
-    color: rgb(56, 184, 5);   
+    color: rgb(56, 184, 5);  
+    text-align: left; 
 }
 #player3{
-    color: rgb(186, 55, 226);   
+    color: rgb(186, 55, 226);
+    text-align: right;
 }

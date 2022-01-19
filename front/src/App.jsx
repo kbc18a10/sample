@@ -88,18 +88,18 @@ const App = React.memo(() => {
     <div className="App">
       <Router>
         <Switch>
-
           {/*ロビー画面*/}
           <Route path="/lobby" render={() => <Lobby onChangeState={handleSetState} onSetName={handleSetName} name={name} myself={myself} players={players}/>} />
+
 
           {/*ルール説明画面*/}
           <Route path="/rule-description" render={() => <RuleDescription onChangeState={handleSetState} />} />
 
           {/*ゲーム画面*/}
-          <Route path="/game" render={() => <Game leavePlayer={leavePlayer} players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable} onPlayerScores={(playerScores) => handlePlayerScores(playerScores)}/>} />
+          <Route path="/game" render={() => players?<Game leavePlayer={leavePlayer} players={players} onChangeState={handleSetState} state={state} name={name} onTileClick={(id) => handleTileClick(id)} onButtonReady={(flg) => handleIsReady(flg)} table={tileTable} onPlayerScores={(playerScores) => handlePlayerScores(playerScores)}/>:<Home onChangeState={handleSetState} />} />
          
           {/*結果画面*/}
-          <Route path="/result" render={() => <Result id={myself} onChangeState={handleSetState} playerScores={playerScores}/>} />
+          <Route path="/result" render={() => players?<Result id={myself} onChangeState={handleSetState} playerScores={playerScores}/>:<Home onChangeState={handleSetState} />} />
 
           {/*ホーム画面*/}
           <Route path="/" render={() => <Home onChangeState={handleSetState} />} />
