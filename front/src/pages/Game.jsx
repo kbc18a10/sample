@@ -149,18 +149,20 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                 {isStartFlg ? <Time gameEnd={(flg)=>handleGameEnd(flg)}/>:<div className="time"></div>}
                 {playerScores[1]?playerScores[1]:<div className='playerGameSocre'/>}
             </div>
-            {isStartFlg ? <TileTable className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table.table}/>
-            :
-            <div className='dummytileTable'> {!isStartFlg
-                &&
-                <div>
-                    <p>ready?</p>
-                    <Button
-                        className={isReady?classes.readyButton:classes.notReadyButton}
-                        onClick={handleClickReady}
-                    />
-                </div>
-                }</div>}
+            <div className="tileTable">
+                {isStartFlg ? <TileTable className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table.table}/>
+                :
+                <div className='dummytileTable'> 
+                    {!isStartFlg &&
+                        <div>
+                            <Button
+                                className={isReady?classes.readyButton:classes.notReadyButton}
+                                onClick={handleClickReady}
+                            />
+                        </div>
+                    }
+                </div>}
+            </div>
             <div className='bottomContext'>
                 {playerScores[2]?playerScores[2]:<div className='playerGameSocre'/>}
                 {playerScores[3]?playerScores[3]:<div className='playerGameSocre'/>}

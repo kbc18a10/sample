@@ -38,7 +38,7 @@ const TileTalbe = React.memo(({onTileClick, table}) => {
     })
 
     return (
-        <div className="tileTable">
+        <div>
             <table id="tileTable">
             {componentTable.map((row) => {
                 return (
