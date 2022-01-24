@@ -47,14 +47,14 @@ div.Result div#buttons{
 }
 
 #result0{
-    color: cyan;   
+    color: #e8110f;   
 }
 #result1{
-    color:rgb(224, 94, 94);
+    color: #10b6b1;
 }
 #result2{
-    color: rgb(56, 184, 5);  
+    color: #63b931;  
 }
 #result3{
-    color: rgb(186, 55, 226);
+    color: #b737e2;
 }

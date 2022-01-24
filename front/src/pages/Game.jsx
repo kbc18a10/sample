@@ -7,6 +7,14 @@ import TileTable from '../components/TileTable';
 import Time from '../components/Time';
 import axios from 'axios';
 import '../css/Game.css';
+import plus0 from '../images/Game/plus0.png';
+import plus1 from '../images/Game/plus1.png';
+import plus2 from '../images/Game/plus2.png';
+import plus3 from '../images/Game/plus3.png';
+import check0 from '../images/Game/check0.png';
+import check1 from '../images/Game/check1.png';
+import check2 from '../images/Game/check2.png';
+import check3 from '../images/Game/check3.png';
 
 
 const useStyles = makeStyles({
@@ -14,16 +22,60 @@ const useStyles = makeStyles({
         backgroundColor:'primary'
     },
     notReadyButton:{
-        backgroundColor:'red',
-        '&:hover':{
-            backgroundColor: 'red'
-        },
+        // backgroundColor:'red',
+        color: 'red',
+        // '&:hover':{
+        //     // backgroundColor: 'red'
+        //     color: 'green'
+        // },
+        fontSize:'44px',
+        border: 'solid 2px #57464c',
+        width:'184px',
+        height:'55px',
+        position: 'absolute',
+        bottom:'5px',
+        left:'589px',
+        margin: 'auto'
     },
     readyButton:{
-        backgroundColor:'green',
-        '&:hover':{
-            backgroundColor: 'green'
-        }, 
+        // backgroundColor:'green',
+        color: 'green',
+        // '&:hover':{
+        //     // backgroundColor: 'green'
+        //     color: 'red'
+        // }, 
+        fontSize:'44px',
+        border: 'solid 2px #57464c',
+        width:'184px',
+        height:'55px',
+        position: 'absolute',
+        bottom:'5px',
+        left:'589px',
+        margin: 'auto'
+    },
+    plus0:{
+        backgroundImage: `url(${plus0})`,
+    },
+    plus1:{
+        backgroundImage: `url(${plus1})`,
+    },
+    plus2:{
+        backgroundImage: `url(${plus2})`,
+    },
+    plus3:{
+        backgroundImage: `url(${plus3})`,
+    },
+    check0:{
+        backgroundImage: `url(${check0})`,
+    },
+    check1:{
+        backgroundImage: `url(${check1})`,
+    },
+    check2:{
+        backgroundImage: `url(${check2})`,
+    },
+    check3:{
+        backgroundImage: `url(${check3})`,
     },
     TileTable:{
         margin:"auto"
@@ -39,6 +91,7 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
     const [isStartFlg, setIsStartFlg] = useState(false);
     const [playerInfo, setPlayerInfo] = useState();
     const [playerScores, setPlayerScores] = useState(new Array(4));
+    const [playerIsReady, setPlayerIsReady] = useState(new Array(4));
     const [leavePlayers, setLeavePlayers] = useState([]);
 
     useEffectDebugger(()=>{
@@ -102,8 +155,8 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
             setPlayerInfo(w_playerInfo);
             setPlayerScores(array);
         }else{
-            console.log(JSON.stringify(players));
             var array = [];
+            var array2 = [];
             var keys = Object.keys(players);
             if(0<=keys.indexOf('isGameStart')){
                 keys.splice(keys.indexOf('isGameStart'),1)
@@ -111,9 +164,39 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
             for(var i = 0; i < keys.length;i++){
                 console.log(players[keys[i]]);
                 var id = "player" + i;
+                var id2 = "ready" + i;
                 array.push(<div className="playerGameSocre" id={id}><span id="playername">{players[keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players[keys[i]]["score"]}</span></div>)
+                var readyClass = "";
+                console.log(classes.plus0);
+                console.log(classes.check0);
+                console.log(classes.check1);
+                console.log(classes.check2);
+                console.log(classes.check3);
+                if(players[keys[i]]['ready']){
+                    if(i == 0){
+                        readyClass = classes.check0;
+                    }else if(i == 1){
+                        readyClass = classes.check1;
+                    }else if(i == 2){
+                        readyClass = classes.check2;
+                    }else{
+                        readyClass = classes.check3;
+                    }
+                }else{
+                    if(i == 0){
+                        readyClass = classes.plus0;
+                    }else if(i == 1){
+                        readyClass = classes.plus1;
+                    }else if(i == 2){
+                        readyClass = classes.plus2;
+                    }else{
+                        readyClass = classes.plus3;
+                    }
+                }
+                array2.push(<span className={readyClass} id={id2}></span>)
             }
             setPlayerScores(array);
+            setPlayerIsReady(array2);
         }
     },[players])
  
@@ -149,7 +232,13 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                 {isStartFlg ? <Time gameEnd={(flg)=>handleGameEnd(flg)}/>:<div className="time"></div>}
                 {playerScores[1]?playerScores[1]:<div className='playerGameSocre'/>}
             </div>
+            {!isStartFlg &&
+                <div className='ReadyState'>
+                    {playerIsReady}
+                </div>
+                }
             <div className="tileTable">
+                
                 {isStartFlg ? <TileTable className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table.table}/>
                 :
                 <div className='dummytileTable'> 
@@ -157,8 +246,9 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                         <div>
                             <Button
                                 className={isReady?classes.readyButton:classes.notReadyButton}
-                                onClick={handleClickReady}
-                            />
+                                onClick={handleClickReady}>
+                                    Ready?
+                            </Button>
                         </div>
                     }
                 </div>}

@@ -35,6 +35,36 @@ div.topContext div{
     font-size: 30px; 
 }
 
+div.ReadyState{
+    position: absolute;
+    width:1366px;
+    top:0;
+    /* padding:  10px;             余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    justify-content:center;
+}
+
+#ready0 {
+    border:solid 4px #e8110f;
+    width: 52px;
+    height:42px;
+}
+#ready1 {
+    border:solid 4px #10b6b1;
+    width: 52px;
+    height:42px;
+}
+#ready2 {
+    border:solid 4px #63b931;
+    width: 52px;
+    height:42px;
+}
+#ready3 {
+    border:solid 4px #b737e2;
+    width: 52px;
+    height:42px;
+}
+
 div.time{
     font-size:40px;
 }
@@ -51,18 +81,18 @@ div.bottomContext div{
 }
 
 #player0{
-    color: cyan;   
+    color: #e8110f;   
     text-align: left;
 }
 #player1{
-    color:rgb(224, 94, 94);
+    color: #10b6b1;
     text-align: right;
 }
 #player2{
-    color: rgb(56, 184, 5);  
+    color: #63b931;  
     text-align: left; 
 }
 #player3{
-    color: rgb(186, 55, 226);
+    color: #b737e2;
     text-align: right;
 }
