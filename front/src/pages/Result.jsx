@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import {useEffectDebugger} from 'use-debugger-hooks';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import {Link,Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import '../css/Result.css'
 import img_toHome from '../images/Result/toHome.png'
 import img_toLobby from '../images/Result/toLobby.png'
