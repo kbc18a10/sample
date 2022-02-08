@@ -10,6 +10,7 @@ import useSound from 'use-sound';
 import Sound from '../audio/button.mp3';
 import Success from '../audio/success.mp3';
 import Miss from '../audio/miss.mp3';
+import Finish from '../audio/finish.mp3';
 import plus0 from '../images/Game/plus0.png';
 import plus1 from '../images/Game/plus1.png';
 import plus2 from '../images/Game/plus2.png';
@@ -92,6 +93,7 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
     const [playSuccess2] = useSound(Success, {volume:0.3});
     const [playMiss1] = useSound(Miss, {volume:1});
     const [playMiss2] = useSound(Miss, {volume:0.3});
+    const [finish] = useSound(Finish, {volume:1});
 
     useEffect(()=>{
         console.log(players);
@@ -159,10 +161,7 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
     },[leavePlayer])
 
     useEffectDebugger(()=>{
-        console.log(table.startTime);
-        console.log("aaaaaaaaa");
         if(0 <= table.startTime){
-            console.log("bbbbbbbbb");
             var w_playerInfo = playerInfo;
             for(var key1 in players['players']){
                 var pname = players['players'][key1]["name"];
@@ -193,7 +192,6 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
             setPlayerInfo(w_playerInfo);
             setPlayerScores(array);
         }else{
-            console.log("cccccccc");
             var array = [];
             var array2 = [];
             var array3 = {};
@@ -274,10 +272,9 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
                 console.log(info);
             })
             onPlayerScores(playerInfo)
+            finish();
         }
     }
-
-    
 
     return (
         <div className="Game"> 

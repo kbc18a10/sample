@@ -2,10 +2,9 @@ import React,{useState} from 'react';
 import {useEffectDebugger} from 'use-debugger-hooks';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import {Link,Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import useSound from 'use-sound';
 import Sound from '../audio/button.mp3';
-import Finish from '../audio/finish.mp3';
 import img_toHome from '../images/Result/toHome.png'
 import img_toLobby from '../images/Result/toLobby.png'
 import '../css/Result.css'
@@ -21,11 +20,6 @@ const Result = ({id,onChangeState,name,playerScores}) => {
     const [scores, setScores] = useState("");
     const [winnerID, setWinnerID] = useState("");
     const [play] = useSound(Sound, {volume:1});
-    const [finish] = useSound(Finish, {volume:1});
-
-    useEffect(()=>{
-        finish();
-    },[])
 
     useEffectDebugger(()=>{
         console.log(playerScores);
