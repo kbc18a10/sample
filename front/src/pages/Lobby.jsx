@@ -68,7 +68,7 @@ const Lobby = React.memo(({onChangeState, onSetName, name, myself, players}) => 
                     <img className="playbutton" src={img_multiplay}></img>
                 </Button>
             </div>
-            {flg&&myself&&players&&<Redirect to="/game" />}
+            {flg&&myself&&players['players']&&<Redirect to="/game" />}
             <div className="bottomElems">
                 <Operation onSetName={handleSetName} name={name}/>
                 <Button

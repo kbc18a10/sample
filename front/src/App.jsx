@@ -57,6 +57,7 @@ const App = React.memo(() => {
   }
 
   const handleChangePlayers = (players) => {
+    console.log(players);
     setPlayers(players);
   }
 

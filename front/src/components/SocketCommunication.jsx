@@ -3,7 +3,6 @@ import {io} from 'socket.io-client';
 import {useEffectDebugger} from 'use-debugger-hooks';
 
 const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTileTable, onSetStartTime, changeMyself, changePlayers, onPlayerLeave}) => {
-  const [players, setPlayers] = useState();
   const [myself, setMyself] = useState();
   const [inited, setinited] = useState(false);
 
@@ -14,10 +13,10 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
     socketRef.current = io();
     socketRef.current.emit('join_player',{name:name,isSingle:isSingle});
    
-    socketRef.current.on('get_players',players => {
+    socketRef.current.on('get_players',(players,click_player) => {
         console.log('get_players');
-        setPlayers(players);
-        changePlayers(players)
+        console.log(click_player);
+        changePlayers({players:players,click_player:click_player})
     })
 
     socketRef.current.on('get_myself',myself => {
@@ -55,7 +54,6 @@ const SocketCommunication = ({name, isSingle, clickedTileID, isReady, onChangeTi
       socketRef.current.disconnect();
       onChangeTileTable({table:[],startTime:-1});
       setMyself();
-      setPlayers();
       // window.clearInterval(intervalID);
     }
   },[])

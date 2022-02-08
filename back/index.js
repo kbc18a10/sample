@@ -159,11 +159,16 @@ io.on('connection', (socket) => {
       console.log('on clicked_tile');
       console.log('emit someone_clicked_tile');
       console.log(data);
+      console.log(data['player']['socketID']);
       var deleteTiles = clickedTileJudge(data,isSingle);
+      var socketID = data['player']['socketID'];
       if(isSingle){
+        var judge = 0;
         if(deleteTiles.onTile && deleteTiles.deleteTiles.length == 0){
+          judge = -1;
           singlePlayer[socket.id].score = (singlePlayer[socket.id].score - 3 < 0) ? 0: singlePlayer[socket.id].score - 3;
         }else if(deleteTiles.onTile){
+          judge = 1;
           singlePlayer[socket.id].score += deleteTiles.deleteTiles.length;
         }
         if(deleteTiles.onTile){
@@ -173,14 +178,17 @@ io.on('connection', (socket) => {
           })
         }
         console.log("emit get_players");
-        io.to(socket.id).emit('get_players',singlePlayer);
+        io.to(socket.id).emit('get_players',singlePlayer,{socketID:socketID,judge:judge});
         console.log('emit get_myself');
         io.to(socket.id).emit('get_myself',singlePlayer);
         io.to(socket.id).emit('someone_clicked_tile',singleTileTable);
       }else{
+        var judge = 0;
         if(deleteTiles.onTile && deleteTiles.deleteTiles.length == 0){
+          judge = -1;
           multiPlayers[room][socket.id].score = (multiPlayers[room][socket.id].score - 3 < 0) ? 0: multiPlayers[room][socket.id].score - 3;
         }else if(deleteTiles.onTile){
+          judge = 1;
           multiPlayers[room][socket.id].score += deleteTiles.deleteTiles.length;
         }
         if(deleteTiles.onTile){
@@ -190,7 +198,7 @@ io.on('connection', (socket) => {
           })
         }
         console.log("emit get_players");
-        io.to(room).emit('get_players',multiPlayers[room]);
+        io.to(room).emit('get_players',multiPlayers[room],{socketID:socketID,judge:judge});
         console.log('emit get_myself');
         io.to(socket.id).emit('get_myself',multiPlayers[room][socket.id]);
         io.to(room).emit('someone_clicked_tile',multiTileTables[room]);

@@ -93,14 +93,18 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
     const [playMiss1] = useSound(Miss, {volume:1});
     const [playMiss2] = useSound(Miss, {volume:0.3});
 
+    useEffect(()=>{
+        console.log(players);
+    },[])
+
     useEffectDebugger(()=>{
         if(table.startTime>0){
             if(!isStartFlg){
                 var array = [];
                 var id = 0;
-                for(var key in players){
+                for(var key in players['players']){
                     if(key != "isGameStart"){
-                        array.push({name:players[key]["name"],score:players[key]["score"],id:id});
+                        array.push({name:players['players'][key]["name"],score:players['players'][key]["score"],id:id});
                         id++;
                     }
                 } 
@@ -155,13 +159,16 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
     },[leavePlayer])
 
     useEffectDebugger(()=>{
-        if(table.startTime == 0){
+        console.log(table.startTime);
+        console.log("aaaaaaaaa");
+        if(0 <= table.startTime){
+            console.log("bbbbbbbbb");
             var w_playerInfo = playerInfo;
-            for(var key1 in players){
-                var pname = players[key1]["name"];
+            for(var key1 in players['players']){
+                var pname = players['players'][key1]["name"];
                 for(var key2 in playerInfo){
                     if(playerInfo[key2]["name"]==pname){
-                        w_playerInfo[key2]["score"] = players[key1]["score"];
+                        w_playerInfo[key2]["score"] = players['players'][key1]["score"];
                     };
                 }
             } 
@@ -169,25 +176,40 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
                 var id = "player" + i;
                 return <div className={'playerGameSocre'} id={id}><span id="playername">{p["name"]}</span><span id="score">&nbsp;Score:{p["score"]}</span></div>
             })
+            console.log(players['click_player']);
+            if(players['click_player']['socketID'] == myself["socketID"]){
+                if(players['click_player']['judge'] == 1){
+                    playSuccess1();
+                }else if(players['click_player']['judge'] == -1){
+                    playMiss1();
+                }
+            }else{
+                if(players['click_player']['judge'] == 1){
+                    playSuccess2();
+                }else if(players['click_player']['judge'] == -1){
+                    playMiss2();
+                }
+            }
             setPlayerInfo(w_playerInfo);
             setPlayerScores(array);
         }else{
+            console.log("cccccccc");
             var array = [];
             var array2 = [];
             var array3 = {};
-            var keys = Object.keys(players);
+            var keys = Object.keys(players['players']);
             if(0<=keys.indexOf('isGameStart')){
                 keys.splice(keys.indexOf('isGameStart'),1)
             }
             for(var i = 0; i < keys.length;i++){
                 console.log(myself);
-                console.log(players[keys[i]]);
+                console.log(players['players'][keys[i]]);
                 var id = "player" + i;
                 var id2 = "ready" + i;
-                array.push(<div className="playerGameSocre" id={id}><span id="playername">{players[keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players[keys[i]]["score"]}</span></div>)
+                array.push(<div className="playerGameSocre" id={id}><span id="playername">{players['players'][keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players['players'][keys[i]]["score"]}</span></div>)
                 var readyClass = "";
                 
-                if(players[keys[i]]['ready']){
+                if(players['players'][keys[i]]['ready']){
                     if(i == 0){
                         readyClass = classes.check0;
                     }else if(i == 1){
@@ -208,8 +230,8 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
                         readyClass = classes.plus3;
                     }
                 }
-                var socketID = players[keys[i]]['socketID'];
-                array3[socketID] = players[keys[i]]['ready']
+                var socketID = players['players'][keys[i]]['socketID'];
+                array3[socketID] = players['players'][keys[i]]['ready']
                 array2.push(<span className={readyClass} id={id2}></span>)
             }
             console.log(myself["socketID"]);
