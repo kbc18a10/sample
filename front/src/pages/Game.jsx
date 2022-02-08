@@ -87,11 +87,11 @@ const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name
     const [leavePlayers, setLeavePlayers] = useState([]);
     const [readyList, setReadyList] = useState({});
     const [playButton1] = useSound(Sound, {volume:1});
-    const [playButton2] = useSound(Sound, {volume:0.5});
+    const [playButton2] = useSound(Sound, {volume:0.3});
     const [playSuccess1] = useSound(Success, {volume:1});
-    const [playSuccess2] = useSound(Success, {volume:0.5});
+    const [playSuccess2] = useSound(Success, {volume:0.3});
     const [playMiss1] = useSound(Miss, {volume:1});
-    const [playMiss2] = useSound(Miss, {volume:0.5});
+    const [playMiss2] = useSound(Miss, {volume:0.3});
 
     useEffectDebugger(()=>{
         if(table.startTime>0){
