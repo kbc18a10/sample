@@ -39,14 +39,16 @@ var maxPlayer = 4;
 var multiPlayers = {};
 var multiTileTables = {};
 
-var tileNum = 187;
-var tileNum0 = 187;
+var tileNum = 124;
+var tileNum0 = 128;
 var rowLength = 44;
 var tileArray0 = [...Array(tileNum0)].map(()=>{return 0});
 var tileArray1 = [...Array(tileNum)].map(()=>{return 1});
 var tileArray2 = [...Array(tileNum)].map(()=>{return 2});
 var tileArray3 = [...Array(tileNum)].map(()=>{return 3});
-var tileArray = tileArray0.concat(tileArray1).concat(tileArray2).concat(tileArray3);
+var tileArray4 = [...Array(tileNum)].map(()=>{return 4});
+var tileArray5 = [...Array(tileNum)].map(()=>{return 5});
+var tileArray = tileArray0.concat(tileArray1).concat(tileArray2).concat(tileArray3).concat(tileArray4).concat(tileArray5);
 
 
 io.on('connection', (socket) => {
@@ -160,7 +162,7 @@ io.on('connection', (socket) => {
       var deleteTiles = clickedTileJudge(data,isSingle);
       if(isSingle){
         if(deleteTiles.onTile && deleteTiles.deleteTiles.length == 0){
-          singlePlayer[socket.id].score = (singlePlayer[socket.id].score - 5 < 0) ? 0: singlePlayer[socket.id].score - 5;
+          singlePlayer[socket.id].score = (singlePlayer[socket.id].score - 3 < 0) ? 0: singlePlayer[socket.id].score - 3;
         }else if(deleteTiles.onTile){
           singlePlayer[socket.id].score += deleteTiles.deleteTiles.length;
         }
@@ -177,7 +179,7 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('someone_clicked_tile',singleTileTable);
       }else{
         if(deleteTiles.onTile && deleteTiles.deleteTiles.length == 0){
-          multiPlayers[room][socket.id].score = (multiPlayers[room][socket.id].score - 5 < 0) ? 0: multiPlayers[room][socket.id].score - 5;
+          multiPlayers[room][socket.id].score = (multiPlayers[room][socket.id].score - 3 < 0) ? 0: multiPlayers[room][socket.id].score - 3;
         }else if(deleteTiles.onTile){
           multiPlayers[room][socket.id].score += deleteTiles.deleteTiles.length;
         }

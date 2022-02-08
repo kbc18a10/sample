@@ -2,6 +2,8 @@ import React from 'react';
 import { Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
+import useSound from 'use-sound';
+import Sound from '../audio/button.mp3';
 import img_ruleToLobby from '../images/RuleDescription/RuleLobby.png';
 import '../css/RuleDescription.css'
 
@@ -15,8 +17,10 @@ const useStyles = makeStyles({
   
 const RuleDescription = ({onChangeState}) => {
     const classes = useStyles();
+    const [play] = useSound(Sound, {volume:1});
 
     const handleChangeState = () => {
+        play();
         onChangeState("lobby");
     }
 

@@ -5,7 +5,9 @@ import { Link, Redirect} from 'react-router-dom';
 import Operation from '../components/Operation';
 import img_singleplay from '../images/Lobby/singleplay.png';
 import img_multiplay from '../images/Lobby/multiplay.png';
-import img_lobbyrule from '../images/Lobby/LobbyRule.png'
+import img_lobbyrule from '../images/Lobby/LobbyRule.png';
+import useSound from 'use-sound';
+import Sound from '../audio/button.mp3';
 
 import '../css/Lobby.css'
 
@@ -23,19 +25,23 @@ const useStyles = makeStyles({
 const Lobby = React.memo(({onChangeState, onSetName, name, myself, players}) => {
     const [flg,setFlg ] = useState(false);
     const [playerName, setPlayerName] = useState(name);
+    const [play] = useSound(Sound, {volume:1});
     const classes = useStyles();
 
     const handleChangeStateSingle = () => {
+        play();
         onChangeState("single");
         setFlg(true);
     }
 
     const handleChangeStateMulti = () => {
+        play();
         onChangeState("multi");
         setFlg(true);
     }
 
     const handleChangeStateRule = () => {
+        play();
         onChangeState("rule");
     }
 

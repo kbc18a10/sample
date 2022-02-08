@@ -5,8 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Redirect} from 'react-router-dom';
 import TileTable from '../components/TileTable';
 import Time from '../components/Time';
-import axios from 'axios';
 import '../css/Game.css';
+import useSound from 'use-sound';
+import Sound from '../audio/button.mp3';
+import Success from '../audio/success.mp3';
+import Miss from '../audio/miss.mp3';
 import plus0 from '../images/Game/plus0.png';
 import plus1 from '../images/Game/plus1.png';
 import plus2 from '../images/Game/plus2.png';
@@ -22,12 +25,7 @@ const useStyles = makeStyles({
         backgroundColor:'primary'
     },
     notReadyButton:{
-        // backgroundColor:'red',
         color: 'red',
-        // '&:hover':{
-        //     // backgroundColor: 'red'
-        //     color: 'green'
-        // },
         fontSize:'44px',
         border: 'solid 2px #57464c',
         width:'184px',
@@ -38,12 +36,7 @@ const useStyles = makeStyles({
         margin: 'auto'
     },
     readyButton:{
-        // backgroundColor:'green',
         color: 'green',
-        // '&:hover':{
-        //     // backgroundColor: 'green'
-        //     color: 'red'
-        // }, 
         fontSize:'44px',
         border: 'solid 2px #57464c',
         width:'184px',
@@ -83,16 +76,22 @@ const useStyles = makeStyles({
 });
   
 
-const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTileClick, onButtonReady, table, onPlayerScores}) => {
+const Game = React.memo(({leavePlayer, players, myself, onChangeState,state,name, onTileClick, onButtonReady, table, onPlayerScores}) => {
     const classes = useStyles();
     const [isReady,setIsReady] = useState(false);
     const [flg, setFlg] = useState(false);
-    // const [init,isInit] = useState(false);
     const [isStartFlg, setIsStartFlg] = useState(false);
     const [playerInfo, setPlayerInfo] = useState();
     const [playerScores, setPlayerScores] = useState(new Array(4));
     const [playerIsReady, setPlayerIsReady] = useState(new Array(4));
     const [leavePlayers, setLeavePlayers] = useState([]);
+    const [readyList, setReadyList] = useState({});
+    const [playButton1] = useSound(Sound, {volume:1});
+    const [playButton2] = useSound(Sound, {volume:0.5});
+    const [playSuccess1] = useSound(Success, {volume:1});
+    const [playSuccess2] = useSound(Success, {volume:0.5});
+    const [playMiss1] = useSound(Miss, {volume:1});
+    const [playMiss2] = useSound(Miss, {volume:0.5});
 
     useEffectDebugger(()=>{
         if(table.startTime>0){
@@ -106,24 +105,42 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                     }
                 } 
                 setPlayerInfo(array);
-                // var militime;
-                setTimeout(()=>{
-                    // console.log(new Date(res.headers.date).getTime());
-                    setIsStartFlg(true);                    
-                },3000);
-                // axios.head(window.location.href).then(res => {
-                    // var start = new Date(res.headers.date).getTime() + 3000;
-                    // console.log(start);
-                    // var now = new Date().getTime();
-                    // console.log(now);
-                    // militime = start-now;
-                    // console.log(militime);
-                    // setTimeout(()=>{
-                    //     console.log(new Date(res.headers.date).getTime());
-                    //     setIsStartFlg(true);                    
-                    // },3000);
-                // })
-                
+
+                const container = document.getElementsByClassName('container')[0];
+                const circle = document.getElementsByClassName('circle')[0];
+                const count = document.getElementsByClassName('count')[0];
+                const count0 = document.getElementsByClassName('count0')[0];
+
+                 // 新しいHTML要素を作成
+                var new_element3 = document.createElement('p');
+                new_element3.textContent = '3';
+                var new_element2 = document.createElement('p');
+                new_element2.textContent = '2';
+                var new_element1 = document.createElement('p');
+                new_element1.textContent = '1';
+
+                // 指定した要素の中の末尾に挿入
+                count.appendChild(new_element3);
+                count.appendChild(new_element2);
+                count.appendChild(new_element1);
+
+                count0.textContent = '0';
+
+                container.setAttribute("id", "container");
+                circle.setAttribute("id", "circle");
+                count.setAttribute("id", "count");
+                count0.setAttribute("id", "count0");
+
+                count0.addEventListener('animationend', () => {
+                    // アニメーション終了後に実行する内容
+                    count.innerHTML = '';
+                    count0.innerHTML = '';
+                    container.setAttribute("id", "");
+                    circle.setAttribute("id", "");
+                    count.setAttribute("id", "");
+                    count0.setAttribute("id", "");
+                    setIsStartFlg(true);
+                })
             }
         }
     },[table])
@@ -157,21 +174,19 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
         }else{
             var array = [];
             var array2 = [];
+            var array3 = {};
             var keys = Object.keys(players);
             if(0<=keys.indexOf('isGameStart')){
                 keys.splice(keys.indexOf('isGameStart'),1)
             }
             for(var i = 0; i < keys.length;i++){
+                console.log(myself);
                 console.log(players[keys[i]]);
                 var id = "player" + i;
                 var id2 = "ready" + i;
                 array.push(<div className="playerGameSocre" id={id}><span id="playername">{players[keys[i]]["name"]}</span><span id="score">&nbsp;Score:{players[keys[i]]["score"]}</span></div>)
                 var readyClass = "";
-                console.log(classes.plus0);
-                console.log(classes.check0);
-                console.log(classes.check1);
-                console.log(classes.check2);
-                console.log(classes.check3);
+                
                 if(players[keys[i]]['ready']){
                     if(i == 0){
                         readyClass = classes.check0;
@@ -193,10 +208,26 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                         readyClass = classes.plus3;
                     }
                 }
+                var socketID = players[keys[i]]['socketID'];
+                array3[socketID] = players[keys[i]]['ready']
                 array2.push(<span className={readyClass} id={id2}></span>)
             }
+            console.log(myself["socketID"]);
+            for(var listID in readyList){
+                for(var id in array3){
+                    if(listID == id && readyList[listID] != array3[id]){
+                        if(myself["socketID"] == listID){
+                            playButton1();
+                        }else{
+                            playButton2();
+                        }
+                    }
+                }
+            }
+
             setPlayerScores(array);
             setPlayerIsReady(array2);
+            setReadyList(array3);
         }
     },[players])
  
@@ -206,10 +237,10 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
 
     const handleClickReady = () => {
         if(isReady){
-            setIsReady(false)
+            setIsReady(false);
             onButtonReady(false);
         }else{
-            setIsReady(true)
+            setIsReady(true);
             onButtonReady(true);
         }
     }
@@ -224,6 +255,8 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
         }
     }
 
+    
+
     return (
         <div className="Game"> 
             {flg&&<Redirect to="/result" />}
@@ -232,26 +265,33 @@ const Game = React.memo(({leavePlayer, players, onChangeState,state,name, onTile
                 {isStartFlg ? <Time gameEnd={(flg)=>handleGameEnd(flg)}/>:<div className="time"></div>}
                 {playerScores[1]?playerScores[1]:<div className='playerGameSocre'/>}
             </div>
+            <div className="container">
+                <div className="circle"></div>
+                <div className="count"></div>
+                <div className="count0"></div>
+            </div>
             {!isStartFlg &&
                 <div className='ReadyState'>
                     {playerIsReady}
                 </div>
-                }
+            }
             <div className="tileTable">
-                
+
                 {isStartFlg ? <TileTable className={classes.TileTable} onTileClick={(id) => handleTileClick(id)} table={table.table}/>
-                :
-                <div className='dummytileTable'> 
-                    {!isStartFlg &&
-                        <div>
-                            <Button
-                                className={isReady?classes.readyButton:classes.notReadyButton}
-                                onClick={handleClickReady}>
-                                    Ready?
-                            </Button>
-                        </div>
-                    }
-                </div>}
+                    :
+                    <div className='dummytileTable'> 
+                        {!isStartFlg &&
+                            <div>
+                                <Button
+                                    className={isReady?classes.readyButton:classes.notReadyButton}
+                                    onClick={handleClickReady}
+                                    disabled={table.startTime>0}>
+                                        Ready?
+                                </Button>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
             <div className='bottomContext'>
                 {playerScores[2]?playerScores[2]:<div className='playerGameSocre'/>}
